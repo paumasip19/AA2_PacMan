@@ -1,0 +1,3 @@
+﻿  main.cpp
+d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\main.cpp(49): warning C4244: 'argumento': conversión de 'float' a 'Uint8'; posible pérdida de datos
+LINK : fatal error LNK1104: no se puede abrir el archivo 'SDL2_net.l'
