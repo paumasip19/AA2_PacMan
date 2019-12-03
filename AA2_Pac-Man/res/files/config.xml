@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Game>
+	<BrickInfo>
+		<Normal min="1" max="3"/>
+		<Heavy min="5" max="7"/>
+	</BrickInfo>
+	<Level PlatformSpeed="8">
+		<Brick i="5" j="0" type="N"/>
+		<Brick i="6" j="0" type="H"/>
+		<Brick i="7" j="0" type="N"/>
+		<Brick i="8" j="0" type="N"/>
+		<Brick i="4" j="1" type="N"/>
+		<Brick i="9" j="1" type="H"/>
+		<Brick i="5" j="2" type="N"/>
+		<Brick i="8" j="2" type="H"/>
+		<Brick i="5" j="3" type="N"/>
+		<Brick i="8" j="3" type="H"/>
+		<Brick i="6" j="4" type="H"/>
+		<Brick i="7" j="4" type="N"/>
+		<Brick i="2" j="5" type="H"/>
+		<Brick i="10" j="5" type="N"/>
+		<Brick i="6" j="5" type="H"/>
+		<Brick i="7" j="5" type="H"/>
+		<Brick i="1" j="6" type="N"/>
+		<Brick i="10" j="6" type="N"/>
+		<Brick i="5" j="9" type="N"/>
+		<Brick i="8" j="9" type="N"/>
+		<Brick i="3" j="10" type="N"/>
+		<Brick i="9" j="10" type="N"/>
+		<Brick i="10" j="10" type="H"/>
+	</Level>
+</Game>

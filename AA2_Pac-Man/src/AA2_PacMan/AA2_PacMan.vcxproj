@@ -160,7 +160,33 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GameController.cpp" />
+    <ClCompile Include="Inputs.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Play.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="Ranking.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Splash_Screen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="GameController.h" />
+    <ClInclude Include="Inputs.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Play.h" />
+    <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="Ranking.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Splash_Screen.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
