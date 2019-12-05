@@ -9,8 +9,15 @@
 class GameController
 {
 public:
+	bool isRunning;
+	GameState gameState;
+	Inputs* inputs;
+	Scene* scene;
 
 	GameController();
+
+	void gameLoop();
+
 	~GameController();
 };
 

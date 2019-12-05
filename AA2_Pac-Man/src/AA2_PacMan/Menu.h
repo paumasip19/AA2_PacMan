@@ -7,6 +7,8 @@ class Menu : public Scene
 public:
 
 	Menu();
+	void update();
+	void draw();
 	~Menu();
 };
 

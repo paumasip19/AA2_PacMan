@@ -2,6 +2,9 @@
 #include <iostream>
 
 enum GameState { SPLASH_SCREEN, MENU, RANKING, PLAY };
+enum SceneState { IS_RUNNING, EXIT_TIME, ENTER_RANKING, 
+	ENTER_PLAY, RETURN_TO_MENU, START_GAME, PAUSED, 
+	GAME_OVER};
 
 struct vec2
 {

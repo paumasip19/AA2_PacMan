@@ -1,9 +1,6 @@
 #pragma once
 #include "Scene.h"
 #include "Button.h"
-#include "Player.h"
-#include "Ball.h"
-#include "Brick.h"
 #include "PowerUp.h"
 
 #include <ctime>

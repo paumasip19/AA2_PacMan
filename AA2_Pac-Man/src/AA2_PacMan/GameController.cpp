@@ -2,6 +2,14 @@
 
 GameController::GameController()
 {
+	isRunning = true;
+	scene = new Menu();
+}
+
+void GameController::gameLoop()
+{
+	scene->update();
+	scene->draw();
 }
 
 
