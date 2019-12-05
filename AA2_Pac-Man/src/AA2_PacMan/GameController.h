@@ -11,6 +11,7 @@ class GameController
 public:
 	bool isRunning;
 	GameState gameState;
+	GameState lastState;
 	Inputs* inputs;
 	Scene* scene;
 

@@ -7,19 +7,17 @@
 
 #include "Constants.h"
 #include "Renderer.h"
+#include "Object.h"
 
 #pragma once
 
 class Button
 {
 private:
+	Object object;
 
-	Text normalTexture;
-	Text hoverTexture;
-
-	Rect rect;
-
-	Text *texture;
+	Text *textureNormal;
+	Text *textureHover;
 
 public:
 	Button();

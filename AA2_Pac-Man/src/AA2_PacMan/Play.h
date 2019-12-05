@@ -18,6 +18,10 @@ class Play : public Scene
 {
 public:
 	Play();
+
+	void update();
+	void draw();
+
 	~Play();
 };
 

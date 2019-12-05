@@ -68,3 +68,6 @@ struct Rect
 	Rect(int X, int Y, vec2 WH) : x(X), y(Y), w(WH.x), h(WH.y) {}
 	Rect(vec2 XY, vec2 WH) : x(XY.x), y(XY.y), w(WH.x), h(WH.y) {}
 };
+
+enum InputKeys {NONE, ESC, SPACE, P, LEFT, RIGHT, UP, DOWN, 
+	MOUSE_LEFT, MOUSE_RIGHT, COUNT};
