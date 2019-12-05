@@ -9,7 +9,7 @@ public:
 	
 	Ranking();
 
-	void update();
+	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
 	void draw();
 
 	~Ranking();

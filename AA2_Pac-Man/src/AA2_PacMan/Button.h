@@ -14,10 +14,10 @@
 class Button
 {
 private:
-	Object object;
+	Object *object;
 
-	Text *textureNormal;
-	Text *textureHover;
+	Text textureNormal;
+	Text textureHover;
 
 public:
 	Button();

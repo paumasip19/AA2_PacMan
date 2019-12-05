@@ -35,7 +35,7 @@ void GameController::gameLoop()
 	
 	lastState = gameState;
 
-	scene->update();
+	scene->update(inputs->mouseCoords, inputs->keyboardPressed, gameState);
 	scene->draw();
 }
 

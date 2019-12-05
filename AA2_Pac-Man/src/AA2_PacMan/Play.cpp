@@ -4,7 +4,7 @@ Play::Play()
 {
 }
 
-void Play::update()
+void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 {
 }
 

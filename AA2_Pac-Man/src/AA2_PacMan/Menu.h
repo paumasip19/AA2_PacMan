@@ -8,8 +8,10 @@ class Menu : public Scene
 public:
 	Object* background;
 
+	Button playButton;
+
 	Menu();
-	void update();
+	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
 	void draw();
 	~Menu();
 };

@@ -8,31 +8,29 @@ Button::Button()
 
 Button::Button(Font font, Text normal, Text hover, vec2 pos)
 {	
-	textureNormal = &normal;
-	textureHover = &normal;
+	textureNormal = normal;
+	textureHover = hover;
 	
 	Renderer* r = Renderer::Instance();
 	r->LoadFont(font);
-	r->LoadTextureText(font.id, *textureNormal);
-	r->LoadTextureText(font.id, *textureHover);
+	r->LoadTextureText(font.id, textureNormal);
+	r->LoadTextureText(font.id, textureHover);
 
-	object.texture = textureNormal;
-	object.rect = { pos.x, pos.y, r->GetTextureSize(normal.id) };
+	object = new Object(pos.x, pos.y, vec2(100, 100),textureNormal.id, textureNormal.text, textureNormal.path, textureNormal.Color);
 }
 
 bool Button::hover(vec2 &mouseCords, bool &click)
 {
-	if (mouseCords.x > object.rect.x && mouseCords.x < (object.rect.x + object.rect.w) && 
-		mouseCords.y > object.rect.y && mouseCords.y < (object.rect.y + object.rect.h))
+	if (mouseCords.x > object->rect.x && mouseCords.x < (object->rect.x + object->rect.w) &&
+		mouseCords.y > object->rect.y && mouseCords.y < (object->rect.y + object->rect.h))
 	{
-		object.texture = textureHover;
+		object->texture = &textureHover;
 		if (click == true)
 			return true;
-
 	}
 	else
 	{
-		object.texture = textureNormal;
+		object->texture = &textureNormal;
 		return false;
 	}
 	return false;
@@ -40,13 +38,13 @@ bool Button::hover(vec2 &mouseCords, bool &click)
 
 void Button::setTextureSize(vec2 size)
 {
-	object.rect.w = size.x;
-	object.rect.h = size.y;
+	object->rect.w = size.x;
+	object->rect.h = size.y;
 }
 
 void Button::draw()
 {
-	Renderer::Instance()->PushImage(object.texture->id, object.rect);
+	Renderer::Instance()->PushImage(object->texture->id, object->rect);
 }
 
 Button::~Button()

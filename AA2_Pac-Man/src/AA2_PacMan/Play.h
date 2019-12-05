@@ -19,7 +19,7 @@ class Play : public Scene
 public:
 	Play();
 
-	void update();
+	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
 	void draw();
 
 	~Play();

@@ -9,7 +9,7 @@ public:
 
 	Scene();
 
-	virtual void update() = 0;
+	virtual void update(vec2 mousePos, bool inputButtons[], GameState &gameState) = 0;
 	virtual void draw() = 0;
 	
 	~Scene();

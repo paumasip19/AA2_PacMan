@@ -42,6 +42,9 @@ void Inputs::inputHandle(bool &isRunning)
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) 
 		{
+			case SDL_QUIT:
+				isRunning = false;
+				break;
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
@@ -69,12 +72,12 @@ void Inputs::inputHandle(bool &isRunning)
 				mouseCoords.y = event.motion.y;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				if (event.key.keysym.sym == SDL_BUTTON_LEFT) SetKeyValue(InputKeys::MOUSE_LEFT, true);
-				if (event.key.keysym.sym == SDL_BUTTON_RIGHT) SetKeyValue(InputKeys::MOUSE_RIGHT, true);
+				if (event.button.button == SDL_BUTTON_LEFT) SetKeyValue(InputKeys::MOUSE_LEFT, true);
+				if (event.button.button == SDL_BUTTON_RIGHT) SetKeyValue(InputKeys::MOUSE_RIGHT, true);
 				break;
 			case SDL_MOUSEBUTTONUP:
-				if (event.key.keysym.sym == SDL_BUTTON_LEFT) SetKeyValue(InputKeys::MOUSE_LEFT, false);
-				if (event.key.keysym.sym == SDL_BUTTON_RIGHT) SetKeyValue(InputKeys::MOUSE_RIGHT, false);
+				if (event.button.button == SDL_BUTTON_LEFT) SetKeyValue(InputKeys::MOUSE_LEFT, false);
+				if (event.button.button == SDL_BUTTON_RIGHT) SetKeyValue(InputKeys::MOUSE_RIGHT, false);
 				break;
 			default:
 				break;
