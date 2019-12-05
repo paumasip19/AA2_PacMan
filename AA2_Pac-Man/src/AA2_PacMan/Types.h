@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
 
-enum GameState { SPLASH_SCREEN, MENU, RANKING, PLAY };
+enum GameState { SPLASH_SCREEN, MENU, RANKING, PLAY, EXIT_GAME };
 enum SceneState { IS_RUNNING, EXIT_TIME, ENTER_RANKING, 
 	ENTER_PLAY, RETURN_TO_MENU, START_GAME, PAUSED, 
-	GAME_OVER};
+	GAME_OVER, EXIT};
 
 struct vec2
 {

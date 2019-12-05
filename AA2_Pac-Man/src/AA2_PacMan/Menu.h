@@ -9,6 +9,8 @@ public:
 	Object* background;
 
 	Button playButton;
+	Button rankingButton;
+	Button exitButton;
 
 	Menu();
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);

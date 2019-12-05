@@ -27,6 +27,8 @@ void GameController::gameLoop()
 		case RANKING:
 			scene = new Ranking();
 			break;
+		case EXIT_GAME:
+			isRunning = false;
 		default:
 			break;
 
