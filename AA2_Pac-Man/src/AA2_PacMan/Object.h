@@ -11,7 +11,7 @@ public:
 
 	Object();
 	Object(int rectX, int rectY, vec2 vecWH, 
-		std::string textureID, std::string textureText, std::string texturePath, color textureColor);
+		std::string textureID, std::string textureText, std::string texturePath, color textureColor, bool isButton);
 	~Object();
 };
 

@@ -10,6 +10,8 @@ public:
 
 	Button playButton;
 	Button rankingButton;
+	Button soundOnButton;
+	Button soundOffButton;
 	Button exitButton;
 
 	Menu();

@@ -16,7 +16,7 @@ Button::Button(Font font, Text normal, Text hover, vec2 pos)
 	r->LoadTextureText(font.id, textureNormal);
 	r->LoadTextureText(font.id, textureHover);
 
-	object = new Object(pos.x, pos.y, vec2(100, 100),textureNormal.id, textureNormal.text, textureNormal.path, textureNormal.Color);
+	object = new Object(pos.x, pos.y, vec2(100, 100),textureNormal.id, textureNormal.text, textureNormal.path, textureNormal.Color, true);
 }
 
 bool Button::hover(vec2 &mouseCords, bool &click)

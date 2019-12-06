@@ -4,10 +4,8 @@ Menu::Menu()
 {
 	sceneState = IS_RUNNING;
 
-	background = new Object(0, 0, vec2(900, 700),
-		"MenuBackground", "", "../../res/img/PacManSpritesheet.png", color());
-
-	Renderer::Instance()->LoadTexture(background->texture->id, background->texture->path);
+	background = new Object(0, 10, vec2(900, 500),
+		"MenuBackground", "", "../../res/img/black_screen.jpg", color(0, 0, 0), false);
 
 	playButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonPlayNormal", "Play", "", color(255, 0, 0)),
@@ -17,12 +15,22 @@ Menu::Menu()
 	rankingButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonRankingNormal", "Ranking", "", color(255, 0, 0)),
 		Text("ButtonRankingHover", "Ranking", "", color(0, 255, 0)),
-		vec2(200, 300));
+		vec2(200, 150));
+
+	soundOnButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("ButtonSoundOnNormal", "Sound On", "", color(255, 0, 0)),
+		Text("ButtonSoundOnHover", "Sound On", "", color(0, 255, 0)),
+		vec2(200, 200));
+
+	soundOffButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("ButtonSoundOffNormal", "Sound Off", "", color(255, 0, 0)),
+		Text("ButtonSoundOffHover", "Sound Off", "", color(0, 255, 0)),
+		vec2(200, 200));
 
 	exitButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonExitNormal", "Exit", "", color(255, 0, 0)),
 		Text("ButtonExitHover", "Exit", "", color(0, 255, 0)),
-		vec2(200, 500));
+		vec2(200, 250));
 
 
 }
@@ -40,6 +48,15 @@ void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			if (rankingButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
 			{
 				sceneState = ENTER_RANKING;
+			}
+
+			if (sound)
+			{
+				if (soundOnButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) sound = false;
+			}
+			else
+			{
+				if (soundOffButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) sound = true;
 			}
 
 			if (exitButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
@@ -65,6 +82,8 @@ void Menu::draw()
 	Renderer::Instance()->PushImage(background->texture->id, background->rect);
 	playButton.draw();
 	rankingButton.draw();
+	if(sound)soundOnButton.draw();
+	else soundOffButton.draw();
 	exitButton.draw();
 }
 

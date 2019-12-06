@@ -6,6 +6,7 @@ class Scene
 {	
 public:
 	SceneState sceneState;
+	bool sound;
 
 	Scene();
 
