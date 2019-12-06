@@ -1,4 +1,5 @@
 #include "Types.h"
+#include "Object.h"
 #include <fstream>
 
 #pragma once

@@ -10,7 +10,6 @@ Splash_Screen::Splash_Screen()
 	r->LoadTexture(background->id, background->path);
 
 	rectGame = { 0,0, vec2(SCREEN_WIDTH * 5, SCREEN_HEIGHT) };
-	rectSprite = { 0,0, vec2(r->GetTextureSize(background->id)) };
 
 	begin = clock();
 }

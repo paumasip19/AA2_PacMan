@@ -4,9 +4,6 @@ Menu::Menu()
 {
 	sceneState = IS_RUNNING;
 
-	background = new Object(0, 10, vec2(900, 500),
-		"MenuBackground", "", "../../res/img/black_screen.jpg", color(0, 0, 0), false);
-
 	playButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonPlayNormal", "Play", "", color(255, 0, 0)),
 		Text("ButtonPlayHover", "Play", "", color(0, 255, 0)),
@@ -31,7 +28,6 @@ Menu::Menu()
 		Text("ButtonExitNormal", "Exit", "", color(255, 0, 0)),
 		Text("ButtonExitHover", "Exit", "", color(0, 255, 0)),
 		vec2(200, 250));
-
 
 }
 
@@ -79,7 +75,7 @@ void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 
 void Menu::draw()
 {
-	Renderer::Instance()->PushImage(background->texture->id, background->rect);
+	Renderer::Instance()->SetRendreDrawColor(color(0,0,0));
 	playButton.draw();
 	rankingButton.draw();
 	if(sound)soundOnButton.draw();

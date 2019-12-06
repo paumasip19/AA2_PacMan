@@ -8,7 +8,6 @@ class Splash_Screen : public Scene
 public:
 	Text * background;
 	Rect rectGame;
-	Rect rectSprite;
 
 	clock_t begin;
 	clock_t end;
