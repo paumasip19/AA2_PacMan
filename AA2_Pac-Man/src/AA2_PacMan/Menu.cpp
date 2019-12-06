@@ -4,10 +4,10 @@ Menu::Menu()
 {
 	sceneState = IS_RUNNING;
 
-	/*background = new Object(10, 0, vec2(500, 500),
-		"MenuBackground", "", "../../res/img/PacManSpritesheet.png", color(0, 100, 0));
+	background = new Object(0, 0, vec2(900, 700),
+		"MenuBackground", "", "../../res/img/PacManSpritesheet.png", color());
 
-	Renderer::Instance()->LoadTexture(background->texture->id, background->texture->path);*/
+	Renderer::Instance()->LoadTexture(background->texture->id, background->texture->path);
 
 	playButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonPlayNormal", "Play", "", color(255, 0, 0)),
@@ -62,7 +62,7 @@ void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 
 void Menu::draw()
 {
-	//Renderer::Instance()->PushImage(background->texture->id, background->rect);
+	Renderer::Instance()->PushImage(background->texture->id, background->rect);
 	playButton.draw();
 	rankingButton.draw();
 	exitButton.draw();

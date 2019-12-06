@@ -17,6 +17,8 @@
 class Play : public Scene
 {
 public:
+	Rect rectGame;
+	Rect map[20][20];
 	Play();
 
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);

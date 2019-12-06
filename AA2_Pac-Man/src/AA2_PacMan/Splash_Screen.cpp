@@ -21,30 +21,30 @@ void Splash_Screen::update(vec2 mousePos, bool inputButtons[], GameState &gameSt
 	switch (sceneState)
 	{
 		case IS_RUNNING:
-			end = clock();
-			timer = double(end - begin) / CLOCKS_PER_SEC;
-			
+			timer = double(clock() - begin) / CLOCKS_PER_SEC;
+			std::cout << timer << std::endl;
+
 			if (timer >= 0.6 && timer <= 1.2)
 			{
-				rectGame.x = SCREEN_WIDTH;
+				rectGame.x = -SCREEN_WIDTH;
 				break;
 			}
 
 			else if (timer >= 1.2 && timer <= 1.8)
 			{
-				rectGame.x = SCREEN_WIDTH * 2;
+				rectGame.x = -SCREEN_WIDTH * 2;
 				break;
 			}
 
 			else if (timer >= 1.8 && timer <= 2.4)
 			{
-				rectGame.x = SCREEN_WIDTH * 3;
+				rectGame.x = -SCREEN_WIDTH * 3;
 				break;
 			}
 
 			else if (timer >= 2.4 && timer < 3)
 			{
-				rectGame.x = SCREEN_WIDTH * 4;
+				rectGame.x = -SCREEN_WIDTH * 4;
 				break;
 			}
 
@@ -53,7 +53,7 @@ void Splash_Screen::update(vec2 mousePos, bool inputButtons[], GameState &gameSt
 				sceneState = EXIT_TIME;
 				break;
 			}
-
+			break;
 
 		case EXIT_TIME:
 			gameState = MENU;
