@@ -13,6 +13,36 @@ struct vec2
 
 	vec2() { x = 0; y = 0; }
 	vec2(int X, int Y) : x(X), y(Y) {}
+
+	vec2 operator + (vec2 const &obj) {
+		vec2 res;
+		res.x = x + obj.x;
+		res.y = y + obj.y;
+		return res;
+	}
+
+	vec2 operator - (vec2 const &obj) {
+		vec2 res;
+		res.x = x - obj.x;
+		res.y = y - obj.y;
+		return res;
+	}
+
+	vec2 operator * (int const &obj)
+	{
+		vec2 res;
+		res.x = x * obj;
+		res.y = y * obj;
+		return res;
+	}
+
+	vec2 operator / (int const &obj)
+	{
+		vec2 res;
+		res.x = x / obj;
+		res.y = y / obj;
+		return res;
+	}
 };
 
 struct Direction

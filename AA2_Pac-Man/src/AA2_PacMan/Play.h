@@ -21,11 +21,15 @@ public:
 	//Map
 	Rect rectGame;
 	Rect map[20][20];
+	char m[20][20];
+	Text *atlas;
+	Rect blue_block;
+
 
 	//Init texts
-	Button *pressSpace;
-	Button *toStart;
-	Text *black;
+	Button pressSpace;
+	Button toStart;
+	
 	Rect blackRect;
 
 	//HUD
