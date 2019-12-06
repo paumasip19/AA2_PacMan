@@ -1,11 +1,18 @@
 #pragma once
-#include <ctime> 
+#include "ctime" 
 #include "Scene.h"
 #include "Button.h"
 
 class Splash_Screen : public Scene
 {
 public:
+	Text * background;
+	Rect rectGame;
+	Rect rectSprite;
+
+	clock_t begin;
+	clock_t end;
+	double timer;
 
 	Splash_Screen();
 

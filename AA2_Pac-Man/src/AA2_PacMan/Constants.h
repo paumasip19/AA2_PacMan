@@ -3,8 +3,8 @@
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 900
+#define SCREEN_HEIGHT 700
 
 #define LEFT_BORDERB 30
 #define RIGHT_BORDERB 750
