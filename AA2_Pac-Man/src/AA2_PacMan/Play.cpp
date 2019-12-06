@@ -8,9 +8,7 @@ Play::Play()
 	Renderer *r = Renderer::Instance();
 	atlas = new Text("Blue_Block", "", "../../res/img/PacManSpritesheet.png", color());
 	r->LoadTexture(atlas->id, atlas->path);
-	
 	blue_block = Rect((r->GetTextureSize("Blue_Block").x / 8) * 4, (r->GetTextureSize("Blue_Block").y / 8) * 6, vec2(128, 128));
-	
 	
 }
 
@@ -34,15 +32,6 @@ void Play::readXML()
 		}
 	}
 
-	for (int i = 0; i < 20; i++)
-	{
-		for (int j = 0; j < 20; j++)
-		{
-			std::cout << m[i][j];
-		}
-		std::cout << std::endl;
-	}
-
 	//Copia de XML
 	rapidxml::xml_document<> doc; //Documento XML
 	std::ifstream file("../../res/files/config.xml"); //Leemos el documento
@@ -53,10 +42,22 @@ void Play::readXML()
 	doc.parse<0>(&content[0]); //Pasamos todo al doc
 
 	//Posiciones 
-
-	//Mapa
+	int x, y;
 	rapidxml::xml_node<> *pRoot = doc.first_node();
 	rapidxml::xml_node<> *pLevel = pRoot->first_node("Map");
+	rapidxml::xml_node<> *pPositions = pLevel->first_node("Positions");
+	rapidxml::xml_node<> *pPlayer = pPositions->first_node("Player");
+	rapidxml::xml_attribute<> *pAttributes = pPlayer->first_attribute("x");
+	m[std::atoi(pAttributes->value())][std::atoi(pAttributes->next_attribute()->value())] = 'P';
+
+	/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");
+	rapidxml::xml_node<> *pInky = pPositions->first_node("Inky");
+	rapidxml::xml_node<> *pClyke = pPositions->first_node("Clyke");
+	rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
+	rapidxml::xml_node<> *pPower = pPowerUps->first_node("Power");*/
+
+	//Mapa
+	
 	rapidxml::xml_node<> *pWall = pLevel->first_node("Wall");
 
 	for (; pWall; pWall = pWall->next_sibling())

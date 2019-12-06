@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "Button.h"
 #include "PowerUp.h"
-
+#include "Player.h"
 #include <ctime>
 
 #include "../../dep/inc/XML/rapidxml.hpp"
