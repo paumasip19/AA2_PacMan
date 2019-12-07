@@ -36,6 +36,12 @@ bool Button::hover(vec2 &mouseCords, bool &click)
 	return false;
 }
 
+void Button::updateText(std::string t)
+{
+	textureNormal.text = t;
+	textureHover.text = t;
+}
+
 void Button::setTextureSize(vec2 size)
 {
 	object->rect.w = size.x;

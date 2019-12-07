@@ -24,14 +24,14 @@ Renderer::Renderer()
 	if (TTF_Init() != 0) throw "No es pot inicialitzar SDL_ttf";
 
 	//Mix
-	/*if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) { throw "Unable to initialize SDL_Mixer audio systems"; }
-	Mix_Music *soundTrack{ Mix_LoadMUS("../../res/au/Arkanoid_Music.mp3") };
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) { throw "Unable to initialize SDL_Mixer audio systems"; }
+	Mix_Music *soundTrack{ Mix_LoadMUS("../../res/au/Menu_Ranking_music.mp3") };
 	if (!soundTrack) throw "Unable to load soundtrack";
 
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 	Mix_PlayMusic(soundTrack, -1);
 
-	pauseMusic();*/
+	pauseMusic();
 	
 };
 

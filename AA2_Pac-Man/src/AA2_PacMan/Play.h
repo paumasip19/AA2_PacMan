@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "PowerUp.h"
 #include "Player.h"
+#include "HUD.h"
 #include <ctime>
 
 #include "../../dep/inc/XML/rapidxml.hpp"
@@ -25,19 +26,18 @@ public:
 	char m[20][20];
 	Text *atlas;
 	Rect blue_block;
+	Rect grey_block;
+	Rect point_block;
+	Rect powerUp_block;
 
 	//Init texts
 	Button pressSpace;
 	Button toStart;	
-	Rect blackRect;
+	Rect black_block;
 
 	//HUD
-	Button *points;
-	Button *fruits[3];
-	Rect rectLifeOne;
-	Rect rectLifeTwo;
-	Rect rectLifeThree;
-
+	HUD hud;
+	
 	//Paused
 	Button *pause;
 	Button *sound;
@@ -57,7 +57,6 @@ public:
 	void lifes();
 	void startMesage();
 	bool canMove();
-	void updatePoints();
 	void draw();
 	~Play();
 };

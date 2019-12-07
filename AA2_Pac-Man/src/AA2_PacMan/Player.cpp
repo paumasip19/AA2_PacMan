@@ -3,11 +3,10 @@
 Player::Player(Rect pos)
 {
 	//Carga de textura
-	texture = new Text("Player", "", "../../res/img/PacManSpritesheet.png", color());
 	Renderer* r = Renderer::Instance();
-	r->LoadTexture(texture->id, texture->path);
+	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
 
-	rect = Rect((r->GetTextureSize("Player").x / 8) * 6, 0, vec2(128, 128));
+	rect = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
 
 	lifes = 3;
 	score = 0;
@@ -57,7 +56,7 @@ bool Player::canMove()
 
 void Player::draw()
 {
-	Renderer::Instance()->PushSprite("Blue_Block", rect, body);
+	Renderer::Instance()->PushSprite("Atlas", rect, body);
 }
 
 Player::~Player()

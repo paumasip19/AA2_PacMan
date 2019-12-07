@@ -3,7 +3,7 @@
 GameController::GameController()
 {
 	isRunning = true;
-	scene = new Play();
+	scene = new Menu();
 	inputs = new Inputs();
 }
 
@@ -37,7 +37,7 @@ void GameController::gameLoop()
 	
 	lastState = gameState;
 
-	scene->update(inputs->mouseCoords, inputs->keyboardPressed, gameState);
+	scene->update(inputs->mouseCoords, inputs->keyboardKeyDown, gameState);
 	scene->draw();
 }
 

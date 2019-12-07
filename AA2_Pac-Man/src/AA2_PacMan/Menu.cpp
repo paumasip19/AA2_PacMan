@@ -48,11 +48,20 @@ void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 
 			if (sound)
 			{
-				if (soundOnButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) sound = false;
+				if (soundOnButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+				{
+					sound = false;
+					Renderer::Instance()->pauseMusic();
+				}
 			}
 			else
 			{
-				if (soundOffButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) sound = true;
+				if (soundOffButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) 
+				{
+					sound = true;
+					Renderer::Instance()->playMusic();
+				}
+				
 			}
 
 			if (exitButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))

@@ -46,11 +46,7 @@ void Inputs::inputHandle(bool &isRunning)
 				isRunning = false;
 				break;
 			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-				{
-					SetKeyValue(InputKeys::ESC, true);
-					isRunning = false;
-				}
+				if (event.key.keysym.sym == SDLK_ESCAPE) SetKeyValue(InputKeys::ESC, true);
 				if (event.key.keysym.sym == SDLK_UP) SetKeyValue(InputKeys::UP, true);
 				if (event.key.keysym.sym == SDLK_DOWN) SetKeyValue(InputKeys::DOWN, true);
 				if (event.key.keysym.sym == SDLK_LEFT) SetKeyValue(InputKeys::LEFT, true);

@@ -2,15 +2,28 @@
 
 Play::Play()
 {
-	sceneState = IS_RUNNING;
+	sceneState = START_GAME;
 	rectGame = { 0,0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
 	readXML();
 	
 	Renderer *r = Renderer::Instance();
-	atlas = new Text("Blue_Block", "", "../../res/img/PacManSpritesheet.png", color());
+	atlas = new Text("Atlas", "", "../../res/img/PacManSpritesheet.png", color());
 	r->LoadTexture(atlas->id, atlas->path);
-	blue_block = Rect((r->GetTextureSize("Blue_Block").x / 8) * 4, (r->GetTextureSize("Blue_Block").y / 8) * 6, vec2(128, 128));
-	
+
+	blue_block = Rect((r->GetTextureSize("Atlas").x / 8) * 4, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	grey_block = Rect((r->GetTextureSize("Atlas").x / 8) * 7, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	point_block = Rect((r->GetTextureSize("Atlas").x / 8) * 5, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	powerUp_block = Rect((r->GetTextureSize("Atlas").x / 8) * 6, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	black_block = Rect(0, (r->GetTextureSize("Atlas").y / 8) * 7, vec2(128, 128));
+
+	pressSpace = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("PS", "Press space", "", color(255, 255, 255)),
+		Text("PS", "Press space", "", color(255, 255, 255)),
+		vec2(200, 100));
+	toStart = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("TS", "to Start", "", color(255, 255, 255)),
+		Text("TS", "to Start", "", color(255, 255, 255)),
+		vec2(200, 200));
 }
 
 void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
@@ -18,10 +31,15 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 	switch (sceneState)
 	{
 		case START_GAME:
+			if (inputButtons[(int)InputKeys::SPACE])
+			{
+				sceneState = IS_RUNNING;
+			}
 			break;
 
 		case IS_RUNNING:
 			//Get Inputs in square centre
+			//std::cout << pacman->body.x << std::endl;
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
 				if (inputButtons[InputKeys::UP])
@@ -44,9 +62,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 
 			//Move player
 			if (canMove())
-			{
-				
-				
+			{			
 				/*system("CLS");
 				for (int i = 0; i < 20; i++)
 				{
@@ -60,19 +76,34 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				pacman->move();
 			}
 
+			if (inputButtons[(int)InputKeys::P])
+			{
+				sceneState = PAUSED;
+			}
+
+			//hud.update(pacman);
 			break;
 
 		case PAUSED:
+			if (inputButtons[(int)InputKeys::SPACE])
+			{
+				sceneState = IS_RUNNING;
+			}
+
+			if (inputButtons[(int)InputKeys::ESC])
+			{
+				sceneState = RETURN_TO_MENU;
+			}
 			break;
 
 		case GAME_OVER:
 			break;
 
 		case RETURN_TO_MENU:
+			gameState = MENU;
 			break;
 	}
 }
-
 
 void Play::readXML()
 {
@@ -84,6 +115,11 @@ void Play::readXML()
 			m[i][j] = 'C';
 		}
 	}
+
+	m[1][4] = 'S';
+	m[18][4] = 'S';
+	m[1][16] = 'S';
+	m[18][16] = 'S';
 
 	//Copia de XML
 	rapidxml::xml_document<> doc; //Documento XML
@@ -104,7 +140,7 @@ void Play::readXML()
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
 	m[x][y] = 'P';
-	pacman = new Player(Rect(vec2(x*35,y*35),vec2(35,35)));
+	pacman = new Player(Rect(vec2(x*35,y*35),vec2(35,35))); //Pacman Init
 	std::cout << std::endl;
 	/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");
 	rapidxml::xml_node<> *pInky = pPositions->first_node("Inky");
@@ -128,6 +164,19 @@ void Play::readXML()
 		map[i][j] = { i * 35, j * 35, vec2(35,35) };
 		m[i][j] = 'W';
 	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		for (int j = 0; j < 20; j++)
+		{
+			if (m[i][j] == 'C' || m[i][j] == 'S')
+			{
+				map[i][j] = { i * 35, j * 35, vec2(35,35) };
+			}
+		}
+	}
+
+
 }
 
 void Play::saveFile()
@@ -175,10 +224,6 @@ bool Play::canMove()
 	}
 }
 
-void Play::updatePoints()
-{
-}
-
 void Play::draw()
 {
 	Renderer *r = Renderer::Instance();
@@ -190,13 +235,34 @@ void Play::draw()
 		{
 			if (m[i][j] == 'W')
 			{
-				r->PushSprite("Blue_Block", blue_block, map[i][j]);
-				//r->PushImage("Blue_Block", map[i][j]);
+				r->PushSprite("Atlas", blue_block, map[i][j]);
+			}
+			else if (m[i][j] == 'C')
+			{
+				r->PushSprite("Atlas", point_block, map[i][j]);
+			}
+			else if (m[i][j] == 'S')
+			{
+				r->PushSprite("Atlas", powerUp_block, map[i][j]);
 			}
 			
 		}
 	}
+	r->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
+
 	pacman->draw();
+	hud.draw();
+
+	if (sceneState == START_GAME)
+	{
+		r->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
+		pressSpace.draw();
+		toStart.draw();
+	}
+	else if (sceneState == PAUSED)
+	{
+		r->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
+	}
 
 }
 
