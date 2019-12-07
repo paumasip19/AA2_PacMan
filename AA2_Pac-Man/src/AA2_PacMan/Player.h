@@ -6,26 +6,24 @@ class Player : public Object
 {
 public:
 private:
-	Text * pTexture;
-	Rect rectGame;
-	Rect rectSprite;
 
 public:
 	int lifes;
 	int score;
 	float speed;
-
-	bool isPowered;
+	int lastDirec;
+	vec2 lastPos;
 
 	clock_t begin;
 	clock_t end;
+	Rect body;
 
-	Player(Text texture, vec2 posGame, vec2 posSprite);
+	Player(Rect pos);
 
 	vec2 getPlayerPosition();
 	vec2 getPlayerSize();
 	void move();
-	bool powerUpCollision();
+	bool canMove();
 	void draw();
 
 	~Player();

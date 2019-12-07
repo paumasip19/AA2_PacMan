@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <stdlib.h>
 #include <vector>
 
 class Play : public Scene
@@ -25,11 +26,9 @@ public:
 	Text *atlas;
 	Rect blue_block;
 
-
 	//Init texts
 	Button pressSpace;
-	Button toStart;
-	
+	Button toStart;	
 	Rect blackRect;
 
 	//HUD
@@ -44,6 +43,9 @@ public:
 	Button *sound;
 	bool soundMusic;
 
+	//Player
+	Player *pacman;
+
 	//Ranking new values
 	std::string playerName;
 	int score;
@@ -54,6 +56,7 @@ public:
 	void saveFile();
 	void lifes();
 	void startMesage();
+	bool canMove();
 	void updatePoints();
 	void draw();
 	~Play();
