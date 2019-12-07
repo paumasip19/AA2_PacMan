@@ -196,30 +196,52 @@ bool Play::canMove()
 	if (pacman->body.x % 35 != 0 || pacman->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
 	else
 	{
-		m[pacman->lastPos.x][pacman->lastPos.y] = ' ';                      // Se borra el icono que habia del jugador en la posición anterior
-		m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
-		pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
-		
+		if (pacman->lastPos.x > 0 && pacman->lastPos.x < 19)
+		{
+			m[pacman->lastPos.x][pacman->lastPos.y] = ' ';                      // Se borra el icono que habia del jugador en la posición anterior
+			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C') score++;    // Se mira si se tiene que sumar un punto normal
+			std::cout << score << std::endl;
+			m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
+			pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
+		}
+
+		else
+		{
+			if (pacman->lastPos.x == 0)
+			{
+				pacman->body.x = 665;
+				pacman->lastPos = vec2(18, pacman->lastPos.y);
+			}
+
+			else if (pacman->lastPos.x == 19)
+			{
+				pacman->body.x = 0;
+				pacman->lastPos = vec2(1, pacman->lastPos.y);
+			}
+
+			m[pacman->lastPos.x][pacman->lastPos.y] = 'P';
+		}
+
 		switch (pacman->lastDirec) // Miramos en la dirección que toca si podemos movernos
 		{
-			case InputKeys::UP:
-				if (m[pacman->lastPos.x][pacman->lastPos.y-1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::DOWN:
-				if (m[pacman->lastPos.x][pacman->lastPos.y+1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::LEFT:
-				if (m[pacman->lastPos.x-1][pacman->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::RIGHT:
-				if (m[pacman->lastPos.x+1][pacman->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			default:
-				break;
+		case InputKeys::UP:
+			if (m[pacman->lastPos.x][pacman->lastPos.y - 1] != 'W') return true;
+			else return false;
+			break;
+		case InputKeys::DOWN:
+			if (m[pacman->lastPos.x][pacman->lastPos.y + 1] != 'W') return true;
+			else return false;
+			break;
+		case InputKeys::LEFT:
+			if (m[pacman->lastPos.x - 1][pacman->lastPos.y] != 'W') return true;
+			else return false;
+			break;
+		case InputKeys::RIGHT:
+			if (m[pacman->lastPos.x + 1][pacman->lastPos.y] != 'W') return true;
+			else return false;
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -228,7 +250,7 @@ void Play::draw()
 {
 	Renderer *r = Renderer::Instance();
 	r->SetRendreDrawColor(color(0, 0, 0));
-	
+	pacman->draw();
 	for (int i = 0; i < 20; i++)
 	{
 		for (int j = 0; j < 20; j++)
@@ -250,7 +272,7 @@ void Play::draw()
 	}
 	r->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
 
-	pacman->draw();
+	//pacman->draw();
 	hud.draw();
 
 	if (sceneState == START_GAME)
