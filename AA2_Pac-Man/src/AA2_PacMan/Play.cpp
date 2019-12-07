@@ -24,6 +24,12 @@ Play::Play()
 		Text("TS", "to Start", "", color(255, 255, 255)),
 		Text("TS", "to Start", "", color(255, 255, 255)),
 		vec2(200, 200));
+
+	fruitsTimes[0] = 0;
+	fruitsTimes[1] = 0;
+	fruitsTimes[2] = 0;
+
+	Renderer::Instance()->pauseMusic();
 }
 
 void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
@@ -81,7 +87,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				sceneState = PAUSED;
 			}
 
-			//hud.update(pacman);
+			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
 			break;
 
 		case PAUSED:
@@ -200,7 +206,6 @@ bool Play::canMove()
 		{
 			m[pacman->lastPos.x][pacman->lastPos.y] = ' ';                      // Se borra el icono que habia del jugador en la posición anterior
 			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C') score++;    // Se mira si se tiene que sumar un punto normal
-			std::cout << score << std::endl;
 			m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
 			pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
 		}
@@ -210,12 +215,22 @@ bool Play::canMove()
 			if (pacman->lastPos.x == 0)
 			{
 				pacman->body.x = 665;
+				if (m[19][pacman->lastPos.y] == 'C')
+				{
+					m[19][pacman->lastPos.y] == ' ';
+					score++;
+				}
 				pacman->lastPos = vec2(18, pacman->lastPos.y);
-			}
 
+			}
 			else if (pacman->lastPos.x == 19)
 			{
 				pacman->body.x = 0;
+				if (m[0][pacman->lastPos.y] == 'C')
+				{
+					m[0][pacman->lastPos.y] == ' ';
+					score++;
+				}
 				pacman->lastPos = vec2(1, pacman->lastPos.y);
 			}
 

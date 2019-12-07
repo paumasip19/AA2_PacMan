@@ -29,6 +29,7 @@ Menu::Menu()
 		Text("ButtonExitHover", "Exit", "", color(0, 255, 0)),
 		vec2(200, 250));
 
+	Renderer::Instance()->playMusic();
 }
 
 void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)

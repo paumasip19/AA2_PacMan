@@ -3,7 +3,7 @@
 GameController::GameController()
 {
 	isRunning = true;
-	scene = new Play();
+	scene = new Splash_Screen();
 	inputs = new Inputs();
 }
 

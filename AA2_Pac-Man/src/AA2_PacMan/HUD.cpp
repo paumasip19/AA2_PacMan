@@ -34,9 +34,12 @@ HUD::HUD()
 	rectLifeThree = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
 }
 
-void HUD::update(int p, int f1, int f2, int f3, int l)
+void HUD::update(int p, int f1, int f2, int f3)
 {
-	//points
+	points.updateText(std::to_string(p));
+	fruitsPoints[0].updateText(std::to_string(f1));
+	fruitsPoints[0].updateText(std::to_string(f2));
+	fruitsPoints[0].updateText(std::to_string(f3));
 }
 
 void HUD::draw()

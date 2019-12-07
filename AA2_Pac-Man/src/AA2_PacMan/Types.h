@@ -56,12 +56,17 @@ struct Direction
 
 struct Font
 {
-	const std::string id;
-	const int size = 40;
-	const std::string path;
+	std::string id;
+	int size = 40;
+	std::string path;
 
 	Font() {}
 	Font(std::string ID, std::string PATH) : id(ID), path(PATH) {}
+	void operator = (Font const &obj) {
+		id = obj.id;
+		size = obj.size;
+		path = obj.path;
+	}
 };
 
 struct color

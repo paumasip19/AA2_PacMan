@@ -16,6 +16,7 @@ class Button
 private:
 	Object *object;
 
+	Font f;
 	Text textureNormal;
 	Text textureHover;
 

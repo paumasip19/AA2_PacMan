@@ -49,6 +49,7 @@ public:
 	//Ranking new values
 	std::string playerName;
 	int score;
+	int fruitsTimes[3];
 	
 	Play();
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
