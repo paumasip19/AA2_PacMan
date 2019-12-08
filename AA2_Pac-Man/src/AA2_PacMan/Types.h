@@ -106,3 +106,5 @@ struct Rect
 
 enum InputKeys {NONE, ESC, SPACE, P, LEFT, RIGHT, UP, DOWN, 
 	MOUSE_LEFT, MOUSE_RIGHT, COUNT};
+
+enum EnemyType { INKY, CLYDE, BLINKY, COUNTS };

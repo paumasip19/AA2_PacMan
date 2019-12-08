@@ -4,6 +4,9 @@
 #include "PowerUp.h"
 #include "Player.h"
 #include "HUD.h"
+#include "Enemy.h"
+#include "Inky.h"
+#include "Clyde.h"
 #include <ctime>
 
 #include "../../dep/inc/XML/rapidxml.hpp"
@@ -14,6 +17,7 @@
 #include <sstream>
 
 #include <stdlib.h>
+#include <cstdlib>
 #include <vector>
 
 class Play : public Scene
@@ -48,6 +52,8 @@ public:
 
 	//Player
 	Player *pacman;
+	Inky *inkyF;
+	Clyde *clydeF;
 
 	//Ranking new values
 	std::string playerName;
@@ -61,6 +67,8 @@ public:
 	void saveFile();
 	void lifes();
 	void startMesage();
+	bool canEnemyMove(int);
+	void playerKilled();
 	bool canMove();
 	void draw();
 	~Play();

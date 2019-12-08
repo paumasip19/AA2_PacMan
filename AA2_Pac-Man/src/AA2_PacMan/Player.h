@@ -5,9 +5,6 @@
 class Player : public Object
 {
 public:
-private:
-
-public:
 	int lifes;
 	int score;
 	float speed;
