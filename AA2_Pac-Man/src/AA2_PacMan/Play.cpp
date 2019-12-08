@@ -4,6 +4,7 @@ Play::Play()
 {
 	sceneState = START_GAME;
 	rectGame = { 0,0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
+	numDots = 0;
 	readXML();
 	
 	Renderer *r = Renderer::Instance();
@@ -41,11 +42,15 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			{
 				sceneState = IS_RUNNING;
 			}
+			
+			if (inputButtons[(int)InputKeys::ESC])
+			{
+				sceneState = RETURN_TO_MENU;
+			}
 			break;
 
 		case IS_RUNNING:
 			//Get Inputs in square centre
-			//std::cout << pacman->body.x << std::endl;
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
 				if (inputButtons[InputKeys::UP])
@@ -69,25 +74,44 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			//Move player
 			if (canMove())
 			{			
-				/*system("CLS");
-				for (int i = 0; i < 20; i++)
-				{
-					for (int j = 0; j < 20; j++)
-					{
-						std::cout << m[i][j];
-					}
-					std::cout << std::endl;
-				}*/
-
 				pacman->move();
+				pacman->animationSprite();
 			}
 
+			//Score Update
+			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
+
+			//Player spends 1 life
+			if (pacman->dead)
+			{
+				// Init Pos Player
+				m[pacman->lastPos.x][pacman->lastPos.y] = ' ';
+				m[pacman->firstPos.x][pacman->firstPos.y] = 'P';
+				pacman->body.x = pacman->firstPos.x * 35;
+				pacman->body.y = pacman->firstPos.y * 35;
+
+				// Init Pos Inky
+
+
+				// Init Pos Clyke
+
+
+				// Init Pos Blinky
+
+				
+				pacman->dead = false;
+				sceneState = START_GAME;
+			}
+
+			//PAUSED SCREEN
 			if (inputButtons[(int)InputKeys::P])
 			{
 				sceneState = PAUSED;
 			}
+			
+			//GAME OVER
+			if (score == numDots || pacman->lifes <= 0) sceneState = GAME_OVER;
 
-			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
 			break;
 
 		case PAUSED:
@@ -103,6 +127,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case GAME_OVER:
+			gameState = RANKING;
 			break;
 
 		case RETURN_TO_MENU:
@@ -119,13 +144,14 @@ void Play::readXML()
 		for (int j = 0; j < 20; j++) 
 		{
 			m[i][j] = 'C';
+			numDots++;
 		}
 	}
 
-	m[1][4] = 'S';
+	/*m[1][4] = 'S';
 	m[18][4] = 'S';
 	m[1][16] = 'S';
-	m[18][16] = 'S';
+	m[18][16] = 'S';*/
 
 	//Copia de XML
 	rapidxml::xml_document<> doc; //Documento XML
@@ -141,19 +167,31 @@ void Play::readXML()
 	rapidxml::xml_node<> *pRoot = doc.first_node();
 	rapidxml::xml_node<> *pLevel = pRoot->first_node("Map");
 	rapidxml::xml_node<> *pPositions = pRoot->first_node("Positions");
-	rapidxml::xml_node<> *pPlayer = pPositions->first_node("Player");
-	rapidxml::xml_attribute<> *pAttributes = pPlayer->first_attribute("x");
-	x = std::atoi(pAttributes->value()) - 1;
-	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	m[x][y] = 'P';
-	pacman = new Player(Rect(vec2(x*35,y*35),vec2(35,35))); //Pacman Init
-	std::cout << std::endl;
-	/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");
-	rapidxml::xml_node<> *pInky = pPositions->first_node("Inky");
-	rapidxml::xml_node<> *pClyke = pPositions->first_node("Clyke");
-	rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
-	rapidxml::xml_node<> *pPower = pPowerUps->first_node("Power");*/
 
+		//Player
+		rapidxml::xml_node<> *pPlayer = pPositions->first_node("Player");
+		rapidxml::xml_attribute<> *pAttributes = pPlayer->first_attribute("x");
+		x = std::atoi(pAttributes->value()) - 1;
+		y = std::atoi(pAttributes->next_attribute()->value()) - 1;
+		m[x][y] = 'P';
+		numDots--;
+		pacman = new Player(Rect(vec2(x*35,y*35),vec2(35,35))); //Pacman Init
+	
+		//Blinky
+		/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");*/
+
+		//Inky
+		/*rapidxml::xml_node<> *pInky = pPositions->first_node("Inky");
+		numDots--;*/
+
+		//Clyke
+		/*rapidxml::xml_node<> *pClyke = pPositions->first_node("Clyke");
+		numDots--;*/
+
+		//PowerUps
+		/*rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
+		rapidxml::xml_node<> *pPower = pPowerUps->first_node("Power");
+		numDots-=; */
 
 	//Mapa
 	rapidxml::xml_node<> *pWall = pLevel->first_node("Wall");
@@ -169,6 +207,7 @@ void Play::readXML()
 		j -= 1;
 		map[i][j] = { i * 35, j * 35, vec2(35,35) };
 		m[i][j] = 'W';
+		numDots--;
 	}
 
 	for (int i = 0; i < 20; i++)
@@ -287,7 +326,6 @@ void Play::draw()
 	}
 	r->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
 
-	//pacman->draw();
 	hud.draw();
 
 	if (sceneState == START_GAME)

@@ -8,14 +8,20 @@ Player::Player(Rect pos)
 
 	rect = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
 
+
 	lifes = 3;
 	score = 0;
 	speed = 1;
 
+	dead = false;
+
 	lastDirec = InputKeys::LEFT;
 
 	body = pos;
+	firstPos = vec2(pos.x/35, pos.y/35);
 	lastPos = vec2(pos.x/35,pos.y/35);
+
+	begin = clock();
 }
 
 vec2 Player::getPlayerPosition()
@@ -49,9 +55,58 @@ void Player::move()
 	}
 }
 
-bool Player::canMove()
+void Player::animationSprite()
 {
-	return false;
+	timer = double(clock() - begin) / CLOCKS_PER_SEC;
+	switch (lastDirec)
+	{
+		case InputKeys::UP:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, 0, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1, 0, vec2(128, 128));
+			}
+			break;
+		case InputKeys::DOWN:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, 0, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 3, 0, vec2(128, 128));
+			}
+			break;
+		case InputKeys::LEFT:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7, 0, vec2(128, 128));
+			}
+			break;
+		case InputKeys::RIGHT:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, 0, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5, 0, vec2(128, 128));
+			}
+			break;
+		default:
+			break;
+	}
 }
 
 void Player::draw()

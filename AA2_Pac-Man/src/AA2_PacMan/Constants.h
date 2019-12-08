@@ -2,6 +2,7 @@
 
 const int FPS = 60;
 const int DELAY_TIME = 1000.0f / FPS;
+const float TIME_ANIM = 0.25f;
 
 #define SCREEN_WIDTH 900
 #define SCREEN_HEIGHT 700

@@ -11,11 +11,14 @@ public:
 	int lifes;
 	int score;
 	float speed;
+	bool dead;
 	int lastDirec;
+	vec2 firstPos;
 	vec2 lastPos;
 
 	clock_t begin;
-	clock_t end;
+	double timer;
+
 	Rect body;
 
 	Player(Rect pos);
@@ -23,7 +26,7 @@ public:
 	vec2 getPlayerPosition();
 	vec2 getPlayerSize();
 	void move();
-	bool canMove();
+	void animationSprite();
 	void draw();
 
 	~Player();

@@ -50,7 +50,8 @@ public:
 	std::string playerName;
 	int score;
 	int fruitsTimes[3];
-	
+	int numDots;
+
 	Play();
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
 	void readXML();
