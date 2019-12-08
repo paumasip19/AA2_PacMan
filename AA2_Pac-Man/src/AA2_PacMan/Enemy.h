@@ -10,7 +10,7 @@ public:
 	char icon;
 	vec2 initPos;
 	
-	float speed;
+	int speed;
 	bool dead;
 	bool dotBehind;
 	int lastDirec;
