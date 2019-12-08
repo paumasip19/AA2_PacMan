@@ -7,29 +7,29 @@ Menu::Menu()
 	playButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonPlayNormal", "Play", "", color(255, 0, 0)),
 		Text("ButtonPlayHover", "Play", "", color(0, 255, 0)),
-		vec2(200, 100));
+		vec2(370, 150));
 
 	rankingButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonRankingNormal", "Ranking", "", color(255, 0, 0)),
 		Text("ButtonRankingHover", "Ranking", "", color(0, 255, 0)),
-		vec2(200, 150));
+		vec2(325, 250));
 
 	soundOnButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonSoundOnNormal", "Sound On", "", color(255, 0, 0)),
 		Text("ButtonSoundOnHover", "Sound On", "", color(0, 255, 0)),
-		vec2(200, 200));
+		vec2(310, 350));
 
 	soundOffButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonSoundOffNormal", "Sound Off", "", color(255, 0, 0)),
 		Text("ButtonSoundOffHover", "Sound Off", "", color(0, 255, 0)),
-		vec2(200, 200));
+		vec2(290, 350));
 
 	exitButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ButtonExitNormal", "Exit", "", color(255, 0, 0)),
 		Text("ButtonExitHover", "Exit", "", color(0, 255, 0)),
-		vec2(200, 250));
+		vec2(380, 450));
 
-	Renderer::Instance()->playMusic();
+	sound = Renderer::Instance()->isMusicOn();
 }
 
 void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
@@ -47,24 +47,30 @@ void Menu::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				sceneState = ENTER_RANKING;
 			}
 
-			if (sound)
+			if (canClick)
 			{
-				if (soundOnButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+				if (sound)
 				{
-					sound = false;
-					Renderer::Instance()->pauseMusic();
+					if (soundOnButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+					{
+						sound = false;
+						Renderer::Instance()->pauseMusic();
+						canClick = false;
+					}
 				}
-			}
-			else
-			{
-				if (soundOffButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT])) 
+				else
 				{
-					sound = true;
-					Renderer::Instance()->playMusic();
-				}
-				
-			}
+					if (soundOffButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+					{
+						sound = true;
+						Renderer::Instance()->playMusic();
+						canClick = false;
+					}
 
+				}
+			}
+			else if (!inputButtons[(int)InputKeys::MOUSE_LEFT]) canClick = true;
+			
 			if (exitButton.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
 			{
 				sceneState = EXIT;

@@ -39,9 +39,12 @@ public:
 	HUD hud;
 	
 	//Paused
-	Button *pause;
-	Button *sound;
+	Button PrSpace;
+	Button ToResume;
+	Button soundOn;
+	Button soundOff;
 	bool soundMusic;
+	bool canClick;
 
 	//Player
 	Player *pacman;

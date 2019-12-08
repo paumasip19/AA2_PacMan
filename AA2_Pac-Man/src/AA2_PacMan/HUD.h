@@ -7,6 +7,7 @@
 class HUD
 {
 public:
+	int lifes;
 	Button points;
 	Button fruitsPoints[3];
 	Rect fruitsImages[3];
@@ -16,8 +17,9 @@ public:
 
 	HUD();
 
-	void update(int p, int f1, int f2, int f3);
+	void update(int p, int f1, int f2, int f3, int l);
 	void draw();
+	void updateText(std::string t, Button &b);
 
 	~HUD();
 };

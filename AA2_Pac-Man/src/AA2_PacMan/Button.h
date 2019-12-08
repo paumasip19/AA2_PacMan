@@ -13,21 +13,20 @@
 
 class Button
 {
-private:
+public:
 	Object *object;
 
 	Font f;
 	Text textureNormal;
 	Text textureHover;
 
-public:
 	Button();
 	Button(Font font, Text normal, Text hover, vec2 pos);
 
 	bool hover(vec2 &mouseCords, bool &click);
-	void updateText(std::string t);
 	void setTextureSize(vec2 size);
 	void draw();
+	
 	
 	~Button();
 };

@@ -21,7 +21,6 @@ void Splash_Screen::update(vec2 mousePos, bool inputButtons[], GameState &gameSt
 	{
 		case IS_RUNNING:
 			timer = double(clock() - begin) / CLOCKS_PER_SEC;
-			std::cout << timer << std::endl;
 
 			if (timer >= 0.6 && timer <= 1.2)
 			{

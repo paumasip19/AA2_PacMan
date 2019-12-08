@@ -1,4 +1,5 @@
 #pragma once
+#include <ctime>
 #include "Scene.h"
 #include "Object.h"
 #include "Button.h"
@@ -13,6 +14,8 @@ public:
 	Button soundOnButton;
 	Button soundOffButton;
 	Button exitButton;
+
+	bool canClick;
 
 	Menu();
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);

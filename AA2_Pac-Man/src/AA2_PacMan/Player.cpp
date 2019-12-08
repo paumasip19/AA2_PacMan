@@ -14,6 +14,7 @@ Player::Player(Rect pos)
 	speed = 1;
 
 	dead = false;
+	fullDeath = false;
 
 	lastDirec = InputKeys::LEFT;
 
@@ -57,9 +58,12 @@ void Player::move()
 
 void Player::animationSprite()
 {
-	timer = double(clock() - begin) / CLOCKS_PER_SEC;
-	switch (lastDirec)
+	if (lifes != 0)
 	{
+		timer = double(clock() - begin) / CLOCKS_PER_SEC;
+
+		switch (lastDirec)
+		{
 		case InputKeys::UP:
 			if (timer >= TIME_ANIM)
 			{
@@ -106,6 +110,98 @@ void Player::animationSprite()
 			break;
 		default:
 			break;
+		}
+	}
+}
+
+void Player::deathAnimation()
+{
+	if (lifes == 0)
+	{
+		timer = double(clock() - begin) / CLOCKS_PER_SEC;
+
+		if (timer >= 0 && timer <= (TIME_DEATH_ANIM / 12) * 1)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 1 && timer <= (TIME_DEATH_ANIM / 12) * 2)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 2 && timer <= (TIME_DEATH_ANIM / 12) * 3)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 3 && timer < (TIME_DEATH_ANIM / 12) * 4)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 4 && timer < (TIME_DEATH_ANIM / 12) * 5)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 5 && timer < (TIME_DEATH_ANIM / 12) * 6)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 6 && timer < (TIME_DEATH_ANIM / 12) * 7)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 7 && timer < (TIME_DEATH_ANIM / 12) * 8)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 3,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 8 && timer < (TIME_DEATH_ANIM / 12) * 9)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 9 && timer < (TIME_DEATH_ANIM / 12) * 10)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 10 && timer < (TIME_DEATH_ANIM / 12) * 11)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 11 && timer < (TIME_DEATH_ANIM / 12) * 12)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 5,
+				vec2(128, 128));
+		}
+		else if (timer >= (TIME_DEATH_ANIM / 12) * 12 && timer < (TIME_DEATH_ANIM / 12) * 13)
+		{
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 3,
+				(Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6,
+				vec2(128, 128));
+		}
+		else if (timer >= TIME_DEATH_ANIM)
+		{
+			fullDeath = true;
+		}
 	}
 }
 

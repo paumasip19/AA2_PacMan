@@ -7,7 +7,7 @@ Ranking::Ranking()
 	returnButton = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("ReturnToMenuNormal", "Return", "", color(255, 0, 0)),
 		Text("ReturnToMenuHover", "Return", "", color(0, 255, 0)),
-		vec2(300, 400));
+		vec2(340, 600));
 }
 
 void Ranking::update(vec2 mousePos, bool inputButtons[], GameState &gameState)

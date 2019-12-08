@@ -14,8 +14,8 @@ Button::Button(Font font, Text normal, Text hover, vec2 pos)
 
 	Renderer* r = Renderer::Instance();
 	r->LoadFont(f);
-	r->LoadTextureText(f.id, textureNormal);
 	r->LoadTextureText(f.id, textureHover);
+	r->LoadTextureText(f.id, textureNormal);
 
 	object = new Object(pos.x, pos.y, vec2(100, 100),textureNormal.id, textureNormal.text, textureNormal.path, textureNormal.Color, true);
 }
@@ -35,14 +35,6 @@ bool Button::hover(vec2 &mouseCords, bool &click)
 		return false;
 	}
 	return false;
-}
-
-void Button::updateText(std::string t)
-{
-	object->texture = new Text(object->texture->id, t, "", object->texture->Color);
-	Renderer::Instance()->LoadTextureText(f.id, *object->texture);
-	//object->textureNormal.text = t;
-	//textureHover.text = t;
 }
 
 void Button::setTextureSize(vec2 size)

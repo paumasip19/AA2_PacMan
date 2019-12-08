@@ -30,9 +30,8 @@ Renderer::Renderer()
 
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 	Mix_PlayMusic(soundTrack, -1);
-
-	pauseMusic();
 	
+	pauseMusic();
 };
 
 
@@ -115,8 +114,7 @@ void Renderer::pauseMusic()
 
 bool Renderer::isMusicOn()
 {
-	if (Mix_PlayingMusic()) return true;
-	else return false;
+	return !Mix_PausedMusic();
 }
 
 

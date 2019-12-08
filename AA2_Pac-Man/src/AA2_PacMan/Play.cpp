@@ -20,17 +20,38 @@ Play::Play()
 	pressSpace = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("PS", "Press space", "", color(255, 255, 255)),
 		Text("PS", "Press space", "", color(255, 255, 255)),
-		vec2(200, 100));
+		vec2(280, 270));
 	toStart = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("TS", "to Start", "", color(255, 255, 255)),
 		Text("TS", "to Start", "", color(255, 255, 255)),
-		vec2(200, 200));
+		vec2(320, 370));
+
+	PrSpace = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("PrS", "Press Space", "", color(255, 255, 255)),
+		Text("PrS", "Press Space", "", color(255, 255, 255)),
+		vec2(280, 220));
+
+	ToResume = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("TR", "to resume", "", color(255, 255, 255)),
+		Text("TR", "to resume", "", color(255, 255, 255)),
+		vec2(300, 320));
+
+	soundOn = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("sOnNormal", "Sound On", "", color(255, 0, 0)),
+		Text("sOnHover", "Sound On", "", color(0, 255, 0)),
+		vec2(310, 500));
+
+	soundOff = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
+		Text("sOffNormal", "Sound Off", "", color(255, 0, 0)),
+		Text("sOffHover", "Sound Off", "", color(0, 255, 0)),
+		vec2(300, 500));
 
 	fruitsTimes[0] = 0;
 	fruitsTimes[1] = 0;
 	fruitsTimes[2] = 0;
 
-	Renderer::Instance()->pauseMusic();
+	sound = Renderer::Instance()->isMusicOn();
+	canClick = true;
 }
 
 void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
@@ -50,6 +71,13 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case IS_RUNNING:
+
+			if (score == 10) pacman->lifes = 2;
+			if (score == 20) pacman->lifes = 1;
+			if (score == 30) pacman->lifes = 0;
+
+
+
 			//Get Inputs in square centre
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
@@ -78,8 +106,10 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				pacman->animationSprite();
 			}
 
+			pacman->deathAnimation();
+
 			//Score Update
-			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
+			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2], pacman->lifes);
 
 			//Player spends 1 life
 			if (pacman->dead)
@@ -110,11 +140,39 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			}
 			
 			//GAME OVER
-			if (score == numDots || pacman->lifes <= 0) sceneState = GAME_OVER;
+			if (score == numDots || pacman->fullDeath)
+			{
+				sceneState = GAME_OVER;
+			}
 
 			break;
 
 		case PAUSED:
+
+			if (canClick)
+			{
+				if (sound)
+				{
+					if (soundOn.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+					{
+						sound = false;
+						Renderer::Instance()->pauseMusic();
+						canClick = false;
+					}
+				}
+				else
+				{
+					if (soundOff.hover(mousePos, inputButtons[(int)InputKeys::MOUSE_LEFT]))
+					{
+						sound = true;
+						Renderer::Instance()->playMusic();
+						canClick = false;
+					}
+
+				}
+			}
+			else if (!inputButtons[(int)InputKeys::MOUSE_LEFT]) canClick = true;
+
 			if (inputButtons[(int)InputKeys::SPACE])
 			{
 				sceneState = IS_RUNNING;
@@ -337,6 +395,11 @@ void Play::draw()
 	else if (sceneState == PAUSED)
 	{
 		r->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
+		PrSpace.draw();
+		ToResume.draw();
+
+		if (sound) soundOn.draw();
+		else soundOff.draw();
 	}
 
 }
