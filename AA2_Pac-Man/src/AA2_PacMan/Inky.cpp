@@ -19,10 +19,14 @@ Inky::Inky(vec2 pos)
 	speed = 1;
 	dead = false;
 	dotBehind = true;
+	isVulnerable = false;
 	lastDirec = InputKeys::LEFT;
 	lastPos = vec2(pos.x / 35, pos.y / 35);
 	initPos = vec2(pos.x / 35, pos.y / 35);
 	begin = clock();
+
+	beginVulnerable = clock();
+	vulnerableTimer = 0;
 
 	body = Rect(pos, vec2(35, 35));
 }
@@ -51,54 +55,75 @@ void Inky::Move()
 void Inky::animationSprite()
 {
 	timer = double(clock() - begin) / CLOCKS_PER_SEC;
-	switch (lastDirec)
+	vulnerableTimer = double(clock() - beginVulnerable) / CLOCKS_PER_SEC;
+
+	if (vulnerableTimer != 0 && vulnerableTimer == VULNERABLE_TIME)
 	{
-	case InputKeys::UP:
+		isVulnerable = false;
+	}
+
+	if (!isVulnerable)
+	{
+		switch (lastDirec)
+		{
+		case InputKeys::UP:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+			}
+			break;
+		case InputKeys::DOWN:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 3, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+			}
+			break;
+		case InputKeys::LEFT:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+			}
+			break;
+		case InputKeys::RIGHT:
+			if (timer >= TIME_ANIM)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+				begin = clock();
+			}
+			else if (timer >= TIME_ANIM / 2)
+			{
+				rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
 		if (timer >= TIME_ANIM)
 		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-			begin = clock();
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4, vec2(128, 128));
 		}
 		else if (timer >= TIME_ANIM / 2)
 		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4, vec2(128, 128));
 		}
-		break;
-	case InputKeys::DOWN:
-		if (timer >= TIME_ANIM)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-			begin = clock();
-		}
-		else if (timer >= TIME_ANIM / 2)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 3, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-		}
-		break;
-	case InputKeys::LEFT:
-		if (timer >= TIME_ANIM)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-			begin = clock();
-		}
-		else if (timer >= TIME_ANIM / 2)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-		}
-		break;
-	case InputKeys::RIGHT:
-		if (timer >= TIME_ANIM)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-			begin = clock();
-		}
-		else if (timer >= TIME_ANIM / 2)
-		{
-			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
-		}
-		break;
-	default:
-		break;
 	}
 }
 

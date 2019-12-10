@@ -71,13 +71,6 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case IS_RUNNING:
-			std::cout << pacman->lifes << std::endl;
-			/*if (score == 10) pacman->lifes = 2;
-			if (score == 20) pacman->lifes = 1;
-			if (score == 30) pacman->lifes = 0;*/
-
-
-
 			//Get Inputs in square centre
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
@@ -127,8 +120,10 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				pacman->move();
 				pacman->animationSprite();
 			}
-
 			pacman->deathAnimation();
+
+			//Fruits Update
+			fruit->update(pacman->body, score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
 
 			//Score Update
 			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2], pacman->lifes);
@@ -237,10 +232,10 @@ void Play::readXML()
 		}
 	}
 
-	/*m[1][4] = 'S';
+	m[1][4] = 'S';
 	m[18][4] = 'S';
 	m[1][16] = 'S';
-	m[18][16] = 'S';*/
+	m[18][16] = 'S';
 
 	//Copia de XML
 	rapidxml::xml_document<> doc; //Documento XML
@@ -287,10 +282,13 @@ void Play::readXML()
 	//Blinky
 	/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");*/
 
+	//Fruits
+	fruit = new Fruit(Rect(vec2(pacman->body.x, pacman->body.y), vec2(35, 35)));
+
 	//PowerUps
-	/*rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
+	rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
 	rapidxml::xml_node<> *pPower = pPowerUps->first_node("Power");
-	numDots-=; */
+	//numDots-=; 
 
 	//Mapa
 	rapidxml::xml_node<> *pWall = pLevel->first_node("Wall");
@@ -343,11 +341,16 @@ bool Play::canMove()
 		if (pacman->lastPos.x > 0 && pacman->lastPos.x < 19)
 		{
 			m[pacman->lastPos.x][pacman->lastPos.y] = ' ';                      // Se borra el icono que habia del jugador en la posición anterior
-			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C') score++;    // Se mira si se tiene que sumar un punto normal
+			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C') score++;    // Se mira si se tiene que sumar un punto
+			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'S')				// Se mira si se tiene que sumar un powerUp
+			{
+				score++;
+				inkyF->isVulnerable = true;
+				clydeF->isVulnerable = true;
+			}
 			m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
 			pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
 		}
-
 		else
 		{
 			if (pacman->lastPos.x == 0)
@@ -481,7 +484,7 @@ bool Play::canEnemyMove(int _type)
 		}
 		break;
 	case EnemyType::CLYDE:
-		if (clydeF->body.x % 35 != 0 || clydeF->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
+		if (clydeF->body.x % 35 != 0 || clydeF->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hará colisión
 		else
 		{
 			if (clydeF->lastPos.x > 0 && clydeF->lastPos.x < 19)
@@ -602,6 +605,7 @@ void Play::draw()
 	pacman->draw();
 	inkyF->draw();
 	clydeF->draw();
+	fruit->draw();
 	r->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
 
 	hud.draw();
@@ -621,7 +625,6 @@ void Play::draw()
 		if (sound) soundOn.draw();
 		else soundOff.draw();
 	}
-
 }
 
 

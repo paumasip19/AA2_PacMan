@@ -1,17 +1,4 @@
-﻿  Clyde.cpp
+﻿  Fruit.cpp
 d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-  Enemy.cpp
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-  GameController.cpp
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-  Inky.cpp
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-  main.cpp
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\main.cpp(6): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  Play.cpp
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\constants.h(4): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-  Generando código...
-d:\uni\apunts prog2\repoaa2\aa2_pacman\aa2_pac-man\src\aa2_pacman\play.cpp(561): warning C4715: 'Play::canEnemyMove': no todas las rutas de acceso de control devuelven un valor
   AA2_PacMan.vcxproj -> D:\Uni\Apunts Prog2\RepoAA2\AA2_PacMan\AA2_Pac-Man\\bin\Win32Debug\G03_AA2-2.exe
   0 archivo(s) copiado(s)

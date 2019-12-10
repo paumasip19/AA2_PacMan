@@ -16,8 +16,13 @@ public:
 	int lastDirec;
 	vec2 lastPos;
 
+	bool isVulnerable;
+
 	clock_t begin;
 	double timer;
+
+	clock_t beginVulnerable;
+	double vulnerableTimer;
 
 	Rect body;
 

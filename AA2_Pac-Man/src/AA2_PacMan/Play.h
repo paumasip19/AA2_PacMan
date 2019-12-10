@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Inky.h"
 #include "Clyde.h"
+#include "Fruit.h"
 #include <ctime>
 
 #include "../../dep/inc/XML/rapidxml.hpp"
@@ -54,6 +55,9 @@ public:
 	Player *pacman;
 	Inky *inkyF;
 	Clyde *clydeF;
+
+	//Fruits
+	Fruit *fruit;
 
 	//Ranking new values
 	std::string playerName;
