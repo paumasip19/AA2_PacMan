@@ -20,10 +20,13 @@ public:
 	clock_t begin;
 	double timer;
 
+	clock_t extraBegin;
+	double extraTimer;
+
 	Fruit(Rect pos);
 	void SetFruit();
 	void SetConcreteFruit(int num);
-	void collision(Rect pacMan, int &p, int &f1, int &f2, int &f3);
+	void collision(Rect pacMan, int &p, int &f);
 	void update(Rect pac, int &p, int &f1, int &f2, int &f3);
 	void draw();
 	~Fruit();

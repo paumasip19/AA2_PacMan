@@ -1,8 +1,7 @@
 #include "Fruit.h"
 
 //TODO
-// NO ES PODEN REPETIR CADA 3 FRUITES DEL MATEIX TIPUS
-//SUMAR HUD
+//Si el player esta a la mateixa casella en el moment d'aparició, esperar 2 segons
 Fruit::Fruit(Rect pos)
 {
 	Renderer* r = Renderer::Instance();
@@ -43,6 +42,16 @@ void Fruit::SetFruit()
 	randOrder[2] = randOrder[1];
 	randOrder[1] = randOrder[0];
 	randOrder[0] = type;
+
+	if (randOrder[1] == type && randOrder[2] == type)
+	{
+		int rNum2 = rNum;
+		while (rNum == rNum2)
+		{
+			rNum = rand() % 3;
+		}
+		SetConcreteFruit(rNum);
+	}
 }
 
 void Fruit::SetConcreteFruit(int num)
@@ -69,45 +78,57 @@ void Fruit::SetConcreteFruit(int num)
 		break;
 	}
 
-	//if (randOrder[1] == type && randOrder[2] == type)
-
-	randOrder[2] = randOrder[1];
-	randOrder[1] = randOrder[0];
 	randOrder[0] = type;
-
-	
 }
 
-void Fruit::collision(Rect pacMan, int &p, int &f1, int &f2, int &f3)
+void Fruit::collision(Rect pacMan, int &p, int &f)
 {
 	if (abs(pacMan.x - body.x) < 10 && abs(pacMan.y - body.y) < 10 && isVisible)
 	{
 		isVisible = false;
 		p += points;
-		
+		f++;
 		begin = clock();
 	}
 }
 
 void Fruit::update(Rect pac, int &p, int &f1, int &f2, int &f3)
 {
-	collision(pac, p, f1, f2, f3);
-
+	switch (type)
+	{
+		case FruitType::CHERRY:
+			collision(pac, p, f1);
+			break;
+		case FruitType::STRAWBERRY:
+			collision(pac, p, f2);
+			break;
+		case FruitType::ORANGE:
+			collision(pac, p, f3);
+			break;
+		default:
+			break;
+	}
+	
 	timer = double(clock() - begin) / CLOCKS_PER_SEC;
 
 	if (firstTime)
 	{
 		if (timer >= 10)
 		{
+			SetFruit();
 			isVisible = true;
 			firstTime = false;
+			begin = clock();
 		}
 	}
 	else
 	{
+		
 		if (timer >= 15)
 		{
+			SetFruit();
 			isVisible = true;
+			begin = clock();
 		}
 	}
 	

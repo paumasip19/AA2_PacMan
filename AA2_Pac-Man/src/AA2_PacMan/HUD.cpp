@@ -56,17 +56,17 @@ void HUD::update(int p, int f1, int f2, int f3, int l)
 
 	if (f1 != fruitsPoints[0].textureNormal.text[2] - '0')
 	{
-		updateText(std::to_string(f1), fruitsPoints[0]);
+		updateText("X " + std::to_string(f1), fruitsPoints[0]);
 	}
 
 	if (f2 != fruitsPoints[1].textureNormal.text[2] - '0')
 	{
-		updateText(std::to_string(f2), fruitsPoints[1]);
+		updateText("X " + std::to_string(f2), fruitsPoints[1]);
 	}
 
 	if (f3 != fruitsPoints[2].textureNormal.text[2] - '0')
 	{
-		updateText(std::to_string(f3), fruitsPoints[2]);
+		updateText("X " + std::to_string(f3), fruitsPoints[2]);
 	}
 
 }
