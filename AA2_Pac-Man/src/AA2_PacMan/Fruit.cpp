@@ -12,6 +12,7 @@ Fruit::Fruit(Rect pos)
 	firstTime = true;
 
 	begin = clock();
+	canAppear = true;
 }
 
 void Fruit::SetFruit()
@@ -89,6 +90,7 @@ void Fruit::collision(Rect pacMan, int &p, int &f)
 		p += points;
 		f++;
 		begin = clock();
+		canAppear = true;
 	}
 }
 
@@ -111,29 +113,32 @@ void Fruit::update(Rect pac, int &p, int &f1, int &f2, int &f3)
 	
 	timer = double(clock() - begin) / CLOCKS_PER_SEC;
 
-	if (firstTime)
+	if (canAppear)
 	{
-		if (timer >= 10)
+		if (firstTime)
 		{
-			SetFruit();
-			isVisible = true;
-			firstTime = false;
-			begin = clock();
+			if (timer >= 10)
+			{
+				SetFruit();
+				isVisible = true;
+				firstTime = false;
+				begin = clock();
+				canAppear = false;
+			}
 		}
-	}
-	else
-	{
-		
-		if (timer >= 15)
+		else
 		{
-			SetFruit();
-			isVisible = true;
-			begin = clock();
-		}
-	}
-	
-	std::cout << timer << std::endl;
 
+			if (timer >= 15)
+			{
+				SetFruit();
+				isVisible = true;
+				begin = clock();
+				canAppear = false;
+			}
+		}
+	}
+	std::cout << timer << std::endl;
 }
 
 void Fruit::draw()

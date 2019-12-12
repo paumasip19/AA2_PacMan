@@ -59,6 +59,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 	switch (sceneState)
 	{
 		case START_GAME:
+			system("CLS");
 			if (inputButtons[(int)InputKeys::SPACE])
 			{
 				sceneState = IS_RUNNING;
@@ -68,10 +69,17 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			{
 				sceneState = RETURN_TO_MENU;
 			}
+			fruit->canAppear = true;
+			fruit->isVisible = false;
 			break;
 
 		case IS_RUNNING:
 			//Get Inputs in square centre
+			if (inputButtons[(int)InputKeys::MOUSE_LEFT])
+			{
+				sceneState = GAME_OVER;
+			}
+
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
 				if (inputButtons[InputKeys::UP])
@@ -134,6 +142,8 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			//Player spends 1 life
 			if (pacman->dead)
 			{
+				fruit->canAppear = false;
+				fruit->isVisible = false;
 				// Init Pos Player
 				m[pacman->lastPos.x][pacman->lastPos.y] = ' ';
 				m[pacman->firstPos.x][pacman->firstPos.y] = 'P';
@@ -157,6 +167,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				
 				pacman->dead = false;
 				sceneState = START_GAME;
+
 			}
 
 			//PAUSED SCREEN
@@ -166,7 +177,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			}
 			
 			//GAME OVER
-			if (score == numDots || pacman->fullDeath)
+			if (numDots == 0 || pacman->fullDeath)
 			{
 				sceneState = GAME_OVER;
 			}
@@ -211,7 +222,22 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case GAME_OVER:
-			gameState = RANKING;
+			std::cout << "***** GAME OVER *****" << std::endl;
+			std::cout << "Inserte el nombre (Utiliza solo 4 letras): " << std::endl;
+			std::cin >> name;
+			if (name.size() > 4)
+			{
+				system("CLS");
+				std::cout << "Numero de caracteres incorrecto!!!" << std::endl;				
+				sceneState = GAME_OVER;
+			}
+			else
+			{
+				system("CLS");
+				saveFile();
+				gameState = RANKING;
+			}
+
 			break;
 
 		case RETURN_TO_MENU:
@@ -317,20 +343,22 @@ void Play::readXML()
 			}
 		}
 	}
-
+	//numDots--;
 
 }
 
 void Play::saveFile()
 {
-}
+	std::ofstream salida("../../res/files/ranking.bin", std::ios::out | std::ios::app | std::ios::binary);
+	size_t len;
 
-void Play::lifes()
-{
-}
+	len = name.size();
+	salida.write(reinterpret_cast<char *>(&len), sizeof(size_t));
+	salida.write(name.c_str(), len);
 
-void Play::startMesage()
-{
+	salida.write(reinterpret_cast<char *>(&score), sizeof(score));
+
+	salida.close();
 }
 
 bool Play::canMove()
@@ -341,9 +369,14 @@ bool Play::canMove()
 		if (pacman->lastPos.x > 0 && pacman->lastPos.x < 19)
 		{
 			m[pacman->lastPos.x][pacman->lastPos.y] = ' ';                      // Se borra el icono que habia del jugador en la posición anterior
-			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C') score++;    // Se mira si se tiene que sumar un punto
+			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'C')				// Se mira si se tiene que sumar un punto
+			{
+				numDots--;
+				score++;    
+			}
 			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'S')				// Se mira si se tiene que sumar un powerUp
 			{
+				numDots--;
 				score++;
 				inkyF->isVulnerable = true;
 				clydeF->isVulnerable = true;
@@ -360,6 +393,7 @@ bool Play::canMove()
 				{
 					m[19][pacman->lastPos.y] = ' ';
 					score++;
+					numDots--;
 				}
 				pacman->lastPos = vec2(18, pacman->lastPos.y);
 
@@ -371,6 +405,7 @@ bool Play::canMove()
 				{
 					m[0][pacman->lastPos.y] = ' ';
 					score++;
+					numDots--;
 				}
 				pacman->lastPos = vec2(1, pacman->lastPos.y);
 			}

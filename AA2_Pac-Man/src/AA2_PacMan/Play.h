@@ -65,12 +65,12 @@ public:
 	int fruitsTimes[3];
 	int numDots;
 
+	std::string name;
+
 	Play();
 	void update(vec2 mousePos, bool inputButtons[], GameState &gameState);
 	void readXML();
 	void saveFile();
-	void lifes();
-	void startMesage();
 	bool canEnemyMove(int);
 	void playerKilled();
 	bool canMove();

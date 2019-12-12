@@ -22,6 +22,7 @@ public:
 
 	clock_t extraBegin;
 	double extraTimer;
+	bool canAppear;
 
 	Fruit(Rect pos);
 	void SetFruit();
