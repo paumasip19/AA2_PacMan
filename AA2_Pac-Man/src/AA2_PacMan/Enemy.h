@@ -24,6 +24,9 @@ public:
 	clock_t beginVulnerable;
 	double vulnerableTimer;
 
+	clock_t beginDead;
+	double deadTimer;
+
 	Rect body;
 
 	Enemy();

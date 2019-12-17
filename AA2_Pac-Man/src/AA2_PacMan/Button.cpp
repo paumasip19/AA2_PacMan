@@ -12,10 +12,9 @@ Button::Button(Font font, Text normal, Text hover, vec2 pos)
 	textureHover = hover;
 	f = font;
 
-	Renderer* r = Renderer::Instance();
-	r->LoadFont(f);
-	r->LoadTextureText(f.id, textureHover);
-	r->LoadTextureText(f.id, textureNormal);
+	Renderer::Instance()->LoadFont(f);
+	Renderer::Instance()->LoadTextureText(f.id, textureHover);
+	Renderer::Instance()->LoadTextureText(f.id, textureNormal);
 
 	object = new Object(pos.x, pos.y, vec2(100, 100),textureNormal.id, textureNormal.text, textureNormal.path, textureNormal.Color, true);
 }

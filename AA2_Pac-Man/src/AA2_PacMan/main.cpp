@@ -4,14 +4,13 @@
 int main()
 {
 	srand(time(NULL));
-	Renderer* r = Renderer::Instance();
 	GameController *gameController = new GameController();
 	
 	while (gameController->isRunning)
 	{
-		r->Clear();
+		Renderer::Instance()->Clear();
 		gameController->gameLoop();
-		r->Render();
+		Renderer::Instance()->Render();
 	}
 
 	return 0;

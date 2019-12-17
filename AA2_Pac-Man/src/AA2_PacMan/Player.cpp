@@ -3,11 +3,9 @@
 Player::Player(Rect pos)
 {
 	//Carga de textura
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
+	Renderer::Instance()->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
 
-	rect = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
-
+	rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
 
 	lifes = 3;
 	score = 0;

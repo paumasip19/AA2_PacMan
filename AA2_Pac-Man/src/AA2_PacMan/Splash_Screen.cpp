@@ -6,8 +6,7 @@ Splash_Screen::Splash_Screen()
 	sceneState = IS_RUNNING;
 
 	background = new Text("LoadScreen","","../../res/img/LoadScreen.png", color());
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture(background->id, background->path);
+	Renderer::Instance()->LoadTexture(background->id, background->path);
 
 	rectGame = { 0,0, vec2(SCREEN_WIDTH * 5, SCREEN_HEIGHT) };
 

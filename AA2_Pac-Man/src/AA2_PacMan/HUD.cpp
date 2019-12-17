@@ -24,16 +24,15 @@ HUD::HUD()
 		Text("Fruit3", "X 0", "", color(0, 0, 0)),
 		vec2(770, 305));
 
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
+	Renderer::Instance()->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
 
-	fruitsImages[0] = Rect(0, (r->GetTextureSize("Atlas").x / 8) * 6, vec2(128, 128));
-	fruitsImages[1] = Rect((r->GetTextureSize("Atlas").x / 8), (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
-	fruitsImages[2] = Rect((r->GetTextureSize("Atlas").x / 8) * 2, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	fruitsImages[0] = Rect(0, (Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, vec2(128, 128));
+	fruitsImages[1] = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8), (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	fruitsImages[2] = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 
-	rectLifeOne = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
-	rectLifeTwo = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
-	rectLifeThree = Rect((r->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
+	rectLifeOne = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
+	rectLifeTwo = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
+	rectLifeThree = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, 0, vec2(128, 128));
 }
 
 void HUD::update(int p, int f1, int f2, int f3, int l)
@@ -78,20 +77,19 @@ void HUD::draw()
 	fruitsPoints[1].draw();
 	fruitsPoints[2].draw();
 
-	Renderer* r = Renderer::Instance();
-	r->PushSprite("Atlas", fruitsImages[0], Rect(700, 150, vec2(70, 70)));
-	r->PushSprite("Atlas", fruitsImages[1], Rect(700, 220, vec2(70, 70)));
-	r->PushSprite("Atlas", fruitsImages[2], Rect(700, 290, vec2(70, 70)));
+	Renderer::Instance()->PushSprite("Atlas", fruitsImages[0], Rect(700, 150, vec2(70, 70)));
+	Renderer::Instance()->PushSprite("Atlas", fruitsImages[1], Rect(700, 220, vec2(70, 70)));
+	Renderer::Instance()->PushSprite("Atlas", fruitsImages[2], Rect(700, 290, vec2(70, 70)));
 
 	if (lifes > 0)
 	{
-		r->PushSprite("Atlas", rectLifeOne, Rect(695, 600, vec2(70, 70)));
+		Renderer::Instance()->PushSprite("Atlas", rectLifeOne, Rect(695, 600, vec2(70, 70)));
 		if (lifes > 1)
 		{
-			r->PushSprite("Atlas", rectLifeTwo, Rect(765, 600, vec2(70, 70)));
+			Renderer::Instance()->PushSprite("Atlas", rectLifeTwo, Rect(765, 600, vec2(70, 70)));
 			if (lifes > 2)
 			{
-				r->PushSprite("Atlas", rectLifeThree, Rect(835, 600, vec2(70, 70)));
+				Renderer::Instance()->PushSprite("Atlas", rectLifeThree, Rect(835, 600, vec2(70, 70)));
 			}
 		}
 	}

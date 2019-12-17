@@ -4,8 +4,7 @@
 //Si el player esta a la mateixa casella en el moment d'aparició, esperar 2 segons
 Fruit::Fruit(Rect pos)
 {
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
+	Renderer::Instance()->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
 	body = pos;
 	SetFruit();
 	isVisible = false;
@@ -17,24 +16,23 @@ Fruit::Fruit(Rect pos)
 
 void Fruit::SetFruit()
 {
-	Renderer *r = Renderer::Instance();
 	int rNum = rand() % 3;
 	switch (rNum)
 	{
 		case 0:
 			type = FruitType::CHERRY;
 			points = 10;
-			rect = Rect((r->GetTextureSize("Atlas").x / 8) * 0, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 			break;
 		case 1:
 			type = FruitType::STRAWBERRY;
 			points = 15;
-			rect = Rect((r->GetTextureSize("Atlas").x / 8) * 1, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 			break;
 		case 2:
 			type = FruitType::ORANGE;
 			points = 20;
-			rect = Rect((r->GetTextureSize("Atlas").x / 8) * 2, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 			break;
 		default:
 			break;
@@ -57,23 +55,22 @@ void Fruit::SetFruit()
 
 void Fruit::SetConcreteFruit(int num)
 {
-	Renderer *r = Renderer::Instance();
 	switch (num)
 	{
 	case 0:
 		type = FruitType::CHERRY;
 		points = 10;
-		rect = Rect((r->GetTextureSize("Atlas").x / 8) * 0, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+		rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 		break;
 	case 1:
 		type = FruitType::STRAWBERRY;
 		points = 15;
-		rect = Rect((r->GetTextureSize("Atlas").x / 8) * 1, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+		rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 1, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 		break;
 	case 2:
 		type = FruitType::ORANGE;
 		points = 20;
-		rect = Rect((r->GetTextureSize("Atlas").x / 8) * 2, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+		rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
 		break;
 	default:
 		break;
@@ -138,7 +135,7 @@ void Fruit::update(Rect pac, int &p, int &f1, int &f2, int &f3)
 			}
 		}
 	}
-	std::cout << timer << std::endl;
+	//std::cout << timer << std::endl;
 }
 
 void Fruit::draw()

@@ -8,10 +8,9 @@ Clyde::Clyde()
 
 Clyde::Clyde(vec2 pos)
 {
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
+	Renderer::Instance()->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
 
-	rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, (r->GetTextureSize("Atlas").y / 8) * 3, vec2(128, 128));
+	rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 3, vec2(128, 128));
 	
 	points = 15;
 	icon = 'F';
@@ -28,6 +27,9 @@ Clyde::Clyde(vec2 pos)
 
 	beginVulnerable = clock();
 	vulnerableTimer = 0;
+
+	beginDead = clock();
+	deadTimer = 0;
 
 	body = Rect(pos, vec2(35,35));
 }
@@ -109,7 +111,19 @@ void Clyde::animationSprite()
 			break;
 		}
 	}
-	else
+}
+
+void Clyde::canDie()
+{
+	if(isVulnerable) vulnerableTimer = double(clock() - beginVulnerable) / CLOCKS_PER_SEC;
+
+	if (vulnerableTimer >= VULNERABLE_TIME)
+	{
+		isVulnerable = false;
+		beginVulnerable = clock();
+	}
+
+	if (isVulnerable)
 	{
 		if (timer >= TIME_ANIM)
 		{
@@ -119,10 +133,24 @@ void Clyde::animationSprite()
 		else if (timer >= TIME_ANIM / 2)
 		{
 			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4, vec2(128, 128));
-		}	
+		}
 	}
+}
 
-	
+void Clyde::die()
+{
+	if (dead)
+	{
+		deadTimer = double(clock() - beginDead) / CLOCKS_PER_SEC;
+		if (deadTimer >= DEAD_TIME)
+		{
+			dead = false;
+			isVulnerable = false;
+			body.x = initPos.x * 35;
+			body.y = initPos.y * 35;
+			beginDead = clock();
+		}
+	}
 }
 
 void Clyde::draw()

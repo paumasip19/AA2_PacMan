@@ -8,9 +8,8 @@ Inky::Inky()
 
 Inky::Inky(vec2 pos)
 {
-	Renderer* r = Renderer::Instance();
-	r->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
-	rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, (r->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
+	Renderer::Instance()->LoadTexture("Atlas", "../../res/img/PacManSpritesheet.png");
+	rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 2, vec2(128, 128));
 
 	points = 10;
 	icon = 'F';
@@ -27,6 +26,9 @@ Inky::Inky(vec2 pos)
 
 	beginVulnerable = clock();
 	vulnerableTimer = 0;
+
+	beginDead = clock();
+	deadTimer = 0;
 
 	body = Rect(pos, vec2(35, 35));
 }
@@ -55,12 +57,6 @@ void Inky::Move()
 void Inky::animationSprite()
 {
 	timer = double(clock() - begin) / CLOCKS_PER_SEC;
-	vulnerableTimer = double(clock() - beginVulnerable) / CLOCKS_PER_SEC;
-
-	if (vulnerableTimer != 0 && vulnerableTimer == VULNERABLE_TIME)
-	{
-		isVulnerable = false;
-	}
 
 	if (!isVulnerable)
 	{
@@ -114,17 +110,47 @@ void Inky::animationSprite()
 			break;
 		}
 	}
-	else
+}
+
+void Inky::canDie()
+{
+	if (isVulnerable) vulnerableTimer = double(clock() - beginVulnerable) / CLOCKS_PER_SEC;
+
+	if (vulnerableTimer >= VULNERABLE_TIME)
+	{
+		isVulnerable = false;
+		beginVulnerable = clock();
+	}
+
+	if (isVulnerable)
 	{
 		if (timer >= TIME_ANIM)
 		{
 			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4, vec2(128, 128));
+			begin = clock();
 		}
 		else if (timer >= TIME_ANIM / 2)
 		{
 			rect = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 2, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 4, vec2(128, 128));
 		}
 	}
+}
+
+void Inky::die()
+{
+	if (dead)
+	{
+		deadTimer = double(clock() - beginDead) / CLOCKS_PER_SEC;
+		if (deadTimer >= DEAD_TIME)
+		{
+			dead = false;
+			isVulnerable = false;
+			body.x = initPos.x * 35;
+			body.y = initPos.y * 35;
+			beginDead = clock();
+		}
+	}
+	std::cout << deadTimer << std::endl;
 }
 
 void Inky::draw()

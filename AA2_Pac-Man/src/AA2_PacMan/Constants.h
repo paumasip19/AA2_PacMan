@@ -5,6 +5,7 @@ const int DELAY_TIME = 1000.0f / FPS;
 const float TIME_ANIM = 0.25f;
 const float TIME_DEATH_ANIM = 2;
 const float VULNERABLE_TIME = 10.f;
+const float DEAD_TIME = 2;
 
 #define SCREEN_WIDTH 900
 #define SCREEN_HEIGHT 700

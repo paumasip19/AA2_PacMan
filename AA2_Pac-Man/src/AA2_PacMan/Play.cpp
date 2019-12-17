@@ -7,15 +7,14 @@ Play::Play()
 	numDots = 0;
 	readXML();
 	
-	Renderer *r = Renderer::Instance();
 	atlas = new Text("Atlas", "", "../../res/img/PacManSpritesheet.png", color());
-	r->LoadTexture(atlas->id, atlas->path);
+	Renderer::Instance()->LoadTexture(atlas->id, atlas->path);
 
-	blue_block = Rect((r->GetTextureSize("Atlas").x / 8) * 4, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
-	grey_block = Rect((r->GetTextureSize("Atlas").x / 8) * 7, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
-	point_block = Rect((r->GetTextureSize("Atlas").x / 8) * 5, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
-	powerUp_block = Rect((r->GetTextureSize("Atlas").x / 8) * 6, (r->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
-	black_block = Rect(0, (r->GetTextureSize("Atlas").y / 8) * 7, vec2(128, 128));
+	blue_block = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 4, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	grey_block = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 7, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	point_block = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 5, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	powerUp_block = Rect((Renderer::Instance()->GetTextureSize("Atlas").x / 8) * 6, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 6, vec2(128, 128));
+	black_block = Rect(0, (Renderer::Instance()->GetTextureSize("Atlas").y / 8) * 7, vec2(128, 128));
 
 	pressSpace = Button(Font("PacFont", "../../res/ttf/PAC-FONT.ttf"),
 		Text("PS", "Press space", "", color(255, 255, 255)),
@@ -112,15 +111,21 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			if (canEnemyMove(EnemyType::INKY))
 			{
 				inkyF->Move();
-				inkyF->animationSprite();
 			}
+
+			inkyF->animationSprite();
+			inkyF->canDie();
+			inkyF->die();
 
 			//Move Clyde
 			if (canEnemyMove(EnemyType::CLYDE))
 			{
-				clydeF->Move();
-				clydeF->animationSprite();
+				clydeF->Move();				
 			}
+
+			clydeF->animationSprite();
+			clydeF->canDie();
+			clydeF->die();
 
 			//Move player
 			if (canMove())
@@ -379,7 +384,9 @@ bool Play::canMove()
 				numDots--;
 				score++;
 				inkyF->isVulnerable = true;
+				inkyF->beginVulnerable = clock();
 				clydeF->isVulnerable = true;
+				clydeF->beginVulnerable = clock();
 			}
 			m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
 			pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
@@ -602,21 +609,45 @@ void Play::playerKilled()
 {
 	if (abs(pacman->body.x - inkyF->body.x) < 10 && abs(pacman->body.y - inkyF->body.y) < 10)
 	{
-		pacman->dead = true;
-		pacman->lifes--;
+		if (!inkyF->isVulnerable)
+		{
+			pacman->dead = true;
+			pacman->lifes--;
+		}
+		else
+		{
+			inkyF->beginDead = clock();
+			m[inkyF->lastPos.x][inkyF->lastPos.y] = ' '; //Posible error por moneda
+			m[inkyF->initPos.x][inkyF->initPos.y] = 'F';
+			score += 10;
+			inkyF->dead = true;
+			inkyF->body = Rect(vec2(3000, 3000), vec2(35, 35));
+		}
+		
 	}
 
 	else if (abs(pacman->body.x - clydeF->body.x) < 10 && abs(pacman->body.y - clydeF->body.y) < 10)
 	{
-		pacman->dead = true;
-		pacman->lifes--;
+		if (!clydeF->isVulnerable)
+		{
+			pacman->dead = true;
+			pacman->lifes--;
+		}
+		else
+		{
+			clydeF->beginDead = clock();
+			m[clydeF->lastPos.x][clydeF->lastPos.y] = ' '; //Posible error por moneda
+			m[clydeF->initPos.x][clydeF->initPos.y] = 'F';
+			score += 15;
+			clydeF->dead = true;
+			clydeF->body = Rect(vec2(3000, 3000), vec2(35, 35));
+		}
 	}
 }
 
 void Play::draw()
 {
-	Renderer *r = Renderer::Instance();
-	r->SetRendreDrawColor(color(0, 0, 0));
+	Renderer::Instance()->SetRendreDrawColor(color(0, 0, 0));
 	pacman->draw();
 	for (int i = 0; i < 20; i++)
 	{
@@ -624,15 +655,15 @@ void Play::draw()
 		{
 			if (m[i][j] == 'W')
 			{
-				r->PushSprite("Atlas", blue_block, map[i][j]);
+				Renderer::Instance()->PushSprite("Atlas", blue_block, map[i][j]);
 			}
 			else if (m[i][j] == 'C')
 			{
-				r->PushSprite("Atlas", point_block, map[i][j]);
+				Renderer::Instance()->PushSprite("Atlas", point_block, map[i][j]);
 			}
 			else if (m[i][j] == 'S')
 			{
-				r->PushSprite("Atlas", powerUp_block, map[i][j]);
+				Renderer::Instance()->PushSprite("Atlas", powerUp_block, map[i][j]);
 			}
 			
 		}
@@ -641,19 +672,19 @@ void Play::draw()
 	inkyF->draw();
 	clydeF->draw();
 	fruit->draw();
-	r->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
+	Renderer::Instance()->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
 
 	hud.draw();
 
 	if (sceneState == START_GAME)
 	{
-		r->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
+		Renderer::Instance()->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
 		pressSpace.draw();
 		toStart.draw();
 	}
 	else if (sceneState == PAUSED)
 	{
-		r->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
+		Renderer::Instance()->PushSprite("Atlas", black_block, Rect(0, 0, vec2(SCREEN_WIDTH, SCREEN_HEIGHT)));
 		PrSpace.draw();
 		ToResume.draw();
 
