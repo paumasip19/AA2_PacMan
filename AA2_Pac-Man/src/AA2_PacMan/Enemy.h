@@ -14,8 +14,8 @@ public:
 	bool dead;
 	bool dotBehind;
 	int lastDirec;
+	int newLastDirec;
 	vec2 lastPos;
-
 	bool isVulnerable;
 
 	clock_t begin;

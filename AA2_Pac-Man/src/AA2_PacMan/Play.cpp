@@ -84,26 +84,26 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 				if (inputButtons[InputKeys::UP])
 				{
 					pacman->lastDirec = InputKeys::UP;
-					inkyF->lastDirec = InputKeys::UP;
-					clydeF->lastDirec = InputKeys::DOWN;
+					inkyF->newLastDirec = InputKeys::UP;
+					clydeF->newLastDirec = InputKeys::DOWN;
 				}
 				else if (inputButtons[InputKeys::DOWN])
 				{
 					pacman->lastDirec = InputKeys::DOWN;
-					inkyF->lastDirec = InputKeys::DOWN;
-					clydeF->lastDirec = InputKeys::UP;
+					inkyF->newLastDirec = InputKeys::DOWN;
+					clydeF->newLastDirec = InputKeys::UP;
 				}
 				else if (inputButtons[InputKeys::RIGHT])
 				{
 					pacman->lastDirec = InputKeys::RIGHT;
-					inkyF->lastDirec = InputKeys::RIGHT;
-					clydeF->lastDirec = InputKeys::LEFT;
+					inkyF->newLastDirec = InputKeys::RIGHT;
+					clydeF->newLastDirec = InputKeys::LEFT;
 				}
 				else if (inputButtons[InputKeys::LEFT])
 				{
 					pacman->lastDirec = InputKeys::LEFT;
-					inkyF->lastDirec = InputKeys::LEFT;
-					clydeF->lastDirec = InputKeys::RIGHT;
+					inkyF->newLastDirec = InputKeys::LEFT;
+					clydeF->newLastDirec = InputKeys::RIGHT;
 				}
 			}
 
@@ -297,7 +297,7 @@ void Play::readXML()
 	pAttributes = pInky->first_attribute("x");
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	m[x][y] = 'F';
+	//m[x][y] = 'F';
 	inkyF = new Inky(vec2(x * 35, y * 35)); //Inky Init
 	numDots--;
 
@@ -306,7 +306,7 @@ void Play::readXML()
 	pAttributes = pClyke->first_attribute("x");
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	m[x][y] = 'F';
+	//m[x][y] = 'F';
 	clydeF = new Clyde(vec2(x * 35, y * 35)); //Clyde Init
 	numDots--;
 
@@ -453,27 +453,9 @@ bool Play::canEnemyMove(int _type)
 		if (inkyF->body.x % 35 != 0 || inkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
 		else
 		{
+			inkyF->lastDirec = inkyF->newLastDirec;
 			if (inkyF->lastPos.x > 0 && inkyF->lastPos.x < 19)
 			{
-				if (inkyF->dotBehind)
-				{
-					m[inkyF->lastPos.x][inkyF->lastPos.y] = 'C';                  // Se vuelve a poner el icono que habia del punto en la posición anterior
-				}
-				else
-				{
-					m[inkyF->lastPos.x][inkyF->lastPos.y] = ' ';					// Se vuelve a poner el icono que habia del espacio en blanco en la posición anterior
-				}
-
-				if (m[inkyF->body.x / 35][inkyF->body.y / 35] == 'C')
-				{
-					inkyF->dotBehind = true;										// Se dice que en la siguiente iteración hay que meter un punto en la posición actual
-				}
-				else
-				{
-					inkyF->dotBehind = false;										// Se dice que en la siguiente iteración NO hay que meter un punto en la posición actual
-				}
-
-				m[inkyF->body.x / 35][inkyF->body.y / 35] = 'F';					// Se mete el icono de fantasma en la posición actual
 				inkyF->lastPos = vec2(inkyF->body.x / 35, inkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
 			}
 
@@ -482,24 +464,14 @@ bool Play::canEnemyMove(int _type)
 				if (inkyF->lastPos.x == 0)
 				{
 					inkyF->body.x = 665;
-					if (m[19][inkyF->lastPos.y] == 'C')
-					{
-						m[19][inkyF->lastPos.y] = 'C';
-					}
 					inkyF->lastPos = vec2(18, inkyF->lastPos.y);
 
 				}
 				else if (inkyF->lastPos.x == 19)
 				{
 					inkyF->body.x = 0;
-					if (m[0][inkyF->lastPos.y] == 'C')
-					{
-						m[0][inkyF->lastPos.y] = 'C';
-					}
 					inkyF->lastPos = vec2(1, inkyF->lastPos.y);
 				}
-
-				m[inkyF->lastPos.x][inkyF->lastPos.y] = 'F';
 			}
 
 			switch (inkyF->lastDirec) // Miramos en la dirección que toca si podemos movernos
@@ -529,25 +501,9 @@ bool Play::canEnemyMove(int _type)
 		if (clydeF->body.x % 35 != 0 || clydeF->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hará colisión
 		else
 		{
+			clydeF->lastDirec = clydeF->newLastDirec;
 			if (clydeF->lastPos.x > 0 && clydeF->lastPos.x < 19)
 			{
-				if (clydeF->dotBehind)
-				{
-					m[clydeF->lastPos.x][clydeF->lastPos.y] = 'C';                  // Se vuelve a poner el icono que habia del punto en la posición anterior
-				}
-				else
-				{
-					m[clydeF->lastPos.x][clydeF->lastPos.y] = ' ';					// Se vuelve a poner el icono que habia del espacio en blanco en la posición anterior
-				}
-				if (m[clydeF->body.x / 35][clydeF->body.y / 35] == 'C')
-				{
-					clydeF->dotBehind = true;										// Se dice que en la siguiente iteración hay que meter un punto en la posición actual
-				}
-				else
-				{
-					clydeF->dotBehind = false;										// Se dice que en la siguiente iteración NO hay que meter un punto en la posición actual
-				}
-				m[clydeF->body.x / 35][clydeF->body.y / 35] = 'F';					// Se mete el icono de fantasma en la posición actual
 				clydeF->lastPos = vec2(clydeF->body.x / 35, clydeF->body.y / 35);	// Se actualiza la última posición de la grid donde estaba el fantasma
 			}
 
@@ -556,24 +512,14 @@ bool Play::canEnemyMove(int _type)
 				if (clydeF->lastPos.x == 0)
 				{
 					clydeF->body.x = 665;
-					if (m[19][clydeF->lastPos.y] == 'C')
-					{
-						m[19][clydeF->lastPos.y] = 'C';
-					}
 					clydeF->lastPos = vec2(18, clydeF->lastPos.y);
 
 				}
 				else if (clydeF->lastPos.x == 19)
 				{
 					clydeF->body.x = 0;
-					if (m[0][clydeF->lastPos.y] == 'C')
-					{
-						m[0][clydeF->lastPos.y] = 'C';
-					}
 					clydeF->lastPos = vec2(1, clydeF->lastPos.y);
 				}
-
-				m[clydeF->lastPos.x][clydeF->lastPos.y] = 'F';
 			}
 
 			switch (clydeF->lastDirec) // Miramos en la dirección que toca si podemos movernos
@@ -617,8 +563,6 @@ void Play::playerKilled()
 		else
 		{
 			inkyF->beginDead = clock();
-			m[inkyF->lastPos.x][inkyF->lastPos.y] = ' '; //Posible error por moneda
-			m[inkyF->initPos.x][inkyF->initPos.y] = 'F';
 			score += 10;
 			inkyF->dead = true;
 			inkyF->body = Rect(vec2(3000, 3000), vec2(35, 35));
@@ -636,8 +580,6 @@ void Play::playerKilled()
 		else
 		{
 			clydeF->beginDead = clock();
-			m[clydeF->lastPos.x][clydeF->lastPos.y] = ' '; //Posible error por moneda
-			m[clydeF->initPos.x][clydeF->initPos.y] = 'F';
 			score += 15;
 			clydeF->dead = true;
 			clydeF->body = Rect(vec2(3000, 3000), vec2(35, 35));

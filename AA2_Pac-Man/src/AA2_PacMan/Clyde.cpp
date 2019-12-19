@@ -20,6 +20,7 @@ Clyde::Clyde(vec2 pos)
 	dead = false;
 	dotBehind = true;
 	isVulnerable = false;
+	newLastDirec = InputKeys::RIGHT;
 	lastDirec = InputKeys::RIGHT;
 	lastPos = vec2(pos.x / 35, pos.y / 35);
 	initPos = vec2(pos.x / 35, pos.y / 35);
