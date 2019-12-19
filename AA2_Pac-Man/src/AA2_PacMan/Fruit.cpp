@@ -12,6 +12,7 @@ Fruit::Fruit(Rect pos)
 
 	begin = clock();
 	canAppear = true;
+	canAppearAgain = true;
 }
 
 void Fruit::SetFruit()
@@ -88,6 +89,7 @@ void Fruit::collision(Rect pacMan, int &p, int &f)
 		f++;
 		begin = clock();
 		canAppear = true;
+		canAppearAgain = true;
 	}
 }
 
@@ -116,26 +118,60 @@ void Fruit::update(Rect pac, int &p, int &f1, int &f2, int &f3)
 		{
 			if (timer >= 10)
 			{
-				SetFruit();
-				isVisible = true;
-				firstTime = false;
-				begin = clock();
-				canAppear = false;
+				if (abs(pac.x - body.x) < 10 && abs(pac.y - body.y) < 10 || canAppearAgain)
+				{
+					extraTimer = double(clock() - extraBegin) / CLOCKS_PER_SEC;
+
+					if (extraTimer >= 2 && abs(pac.x - body.x) < 10 && abs(pac.y - body.y) < 10)
+					{
+						extraBegin = clock();
+					}
+					else if (extraTimer >= 2 && !abs(pac.x - body.x) < 10 && !abs(pac.y - body.y) < 10)
+					{
+						canAppearAgain = false;
+						extraBegin = clock();
+					}
+				}
+				else
+				{
+					SetFruit();
+					isVisible = true;
+					firstTime = false;
+					begin = clock();
+					canAppear = false;
+					canAppearAgain = false;
+				}
 			}
 		}
 		else
 		{
-
 			if (timer >= 15)
 			{
-				SetFruit();
-				isVisible = true;
-				begin = clock();
-				canAppear = false;
+				if (abs(pac.x - body.x) < 10 && abs(pac.y - body.y) < 10 || canAppearAgain)
+				{
+					extraTimer = double(clock() - extraBegin) / CLOCKS_PER_SEC;
+
+					if (extraTimer >= 2 && abs(pac.x - body.x) < 10 && abs(pac.y - body.y) < 10)
+					{
+						extraBegin = clock();
+					}
+					else if(extraTimer >= 2 && !abs(pac.x - body.x) < 10 && !abs(pac.y - body.y) < 10)
+					{
+						canAppearAgain = false;
+						extraBegin = clock();
+					}
+				}
+				else
+				{
+					SetFruit();
+					isVisible = true;
+					begin = clock();
+					canAppear = false;
+					canAppearAgain = false;
+				}
 			}
 		}
 	}
-	//std::cout << timer << std::endl;
 }
 
 void Fruit::draw()

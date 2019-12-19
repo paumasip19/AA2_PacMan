@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Inky.h"
 #include "Clyde.h"
+#include "Blinky.h"
 #include "Fruit.h"
 #include <ctime>
 
@@ -55,6 +56,7 @@ public:
 	Player *pacman;
 	Inky *inkyF;
 	Clyde *clydeF;
+	Blinky *blinkyF;
 
 	//Fruits
 	Fruit *fruit;

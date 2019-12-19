@@ -73,11 +73,8 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case IS_RUNNING:
+			//std::cout << numDots << std::endl;
 			//Get Inputs in square centre
-			if (inputButtons[(int)InputKeys::MOUSE_LEFT])
-			{
-				sceneState = GAME_OVER;
-			}
 
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0)
 			{
@@ -127,6 +124,16 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			clydeF->canDie();
 			clydeF->die();
 
+			//Move Blinky
+			if (canEnemyMove(EnemyType::BLINKY))
+			{
+				blinkyF->Move();
+			}
+
+			blinkyF->animationSprite();
+			blinkyF->canDie();
+			blinkyF->die();
+
 			//Move player
 			if (canMove())
 			{			
@@ -163,11 +170,15 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 
 				// Init Pos Clyke
 				m[clydeF->lastPos.x][clydeF->lastPos.y] = ' ';
-				m[inkyF->initPos.x][clydeF->initPos.y] = 'F';
+				m[clydeF->initPos.x][clydeF->initPos.y] = 'F';
 				clydeF->body.x = clydeF->initPos.x * 35;
 				clydeF->body.y = clydeF->initPos.y * 35;
 
 				// Init Pos Blinky
+				m[blinkyF->lastPos.x][blinkyF->lastPos.y] = ' ';
+				m[blinkyF->initPos.x][blinkyF->initPos.y] = 'F';
+				blinkyF->body.x = blinkyF->initPos.x * 35;
+				blinkyF->body.y = blinkyF->initPos.y * 35;
 
 				
 				pacman->dead = false;
@@ -299,7 +310,6 @@ void Play::readXML()
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
 	//m[x][y] = 'F';
 	inkyF = new Inky(vec2(x * 35, y * 35)); //Inky Init
-	numDots--;
 
 	//Clyde
 	rapidxml::xml_node<> *pClyke = pPositions->first_node("Clyke");
@@ -308,10 +318,14 @@ void Play::readXML()
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
 	//m[x][y] = 'F';
 	clydeF = new Clyde(vec2(x * 35, y * 35)); //Clyde Init
-	numDots--;
 
 	//Blinky
-	/*rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");*/
+	rapidxml::xml_node<> *pBlinky = pPositions->first_node("Blinky");
+	pAttributes = pBlinky->first_attribute("x");
+	x = std::atoi(pAttributes->value()) - 1;
+	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
+	//m[x][y] = 'F';
+	blinkyF = new Blinky(vec2(x * 35, y * 35)); //Blinky Init
 
 	//Fruits
 	fruit = new Fruit(Rect(vec2(pacman->body.x, pacman->body.y), vec2(35, 35)));
@@ -319,7 +333,6 @@ void Play::readXML()
 	//PowerUps
 	rapidxml::xml_node<> *pPowerUps = pPositions->first_node("PowerUps");
 	rapidxml::xml_node<> *pPower = pPowerUps->first_node("Power");
-	//numDots-=; 
 
 	//Mapa
 	rapidxml::xml_node<> *pWall = pLevel->first_node("Wall");
@@ -348,7 +361,6 @@ void Play::readXML()
 			}
 		}
 	}
-	//numDots--;
 
 }
 
@@ -387,6 +399,8 @@ bool Play::canMove()
 				inkyF->beginVulnerable = clock();
 				clydeF->isVulnerable = true;
 				clydeF->beginVulnerable = clock();
+				blinkyF->isVulnerable = true;
+				blinkyF->beginVulnerable = clock();
 			}
 			m[pacman->body.x / 35][pacman->body.y / 35] = 'P';					// Se mete el icono en la posición actual
 			pacman->lastPos = vec2(pacman->body.x / 35, pacman->body.y / 35);	// Se actualizad la última posición de la grid donde estaba el jugador
@@ -545,6 +559,55 @@ bool Play::canEnemyMove(int _type)
 			}
 		}
 		break;
+	case EnemyType::BLINKY:
+		if (blinkyF->body.x % 35 != 0 || blinkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
+		else
+		{
+			blinkyF->lastDirec = blinkyF->newLastDirec;
+
+			if (blinkyF->lastPos.x > 0 && blinkyF->lastPos.x < 19)
+			{
+				blinkyF->lastPos = vec2(blinkyF->body.x / 35, blinkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
+			}
+
+			else
+			{
+				if (blinkyF->lastPos.x == 0)
+				{
+					blinkyF->body.x = 665;
+					blinkyF->lastPos = vec2(18, blinkyF->lastPos.y);
+
+				}
+				else if (blinkyF->lastPos.x == 19)
+				{
+					blinkyF->body.x = 0;
+					blinkyF->lastPos = vec2(1, blinkyF->lastPos.y);
+				}
+			}
+
+			switch (blinkyF->lastDirec) // Miramos en la dirección que toca si podemos movernos
+			{
+			case InputKeys::UP:
+				if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') return true;
+				else return false;
+				break;
+			case InputKeys::DOWN:
+				if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') return true;
+				else return false;
+				break;
+			case InputKeys::LEFT:
+				if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') return true;
+				else return false;
+				break;
+			case InputKeys::RIGHT:
+				if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') return true;
+				else return false;
+				break;
+			default:
+				break;
+			}
+		}
+		break;
 	default:
 		return false;
 		break;
@@ -569,7 +632,6 @@ void Play::playerKilled()
 		}
 		
 	}
-
 	else if (abs(pacman->body.x - clydeF->body.x) < 10 && abs(pacman->body.y - clydeF->body.y) < 10)
 	{
 		if (!clydeF->isVulnerable)
@@ -583,6 +645,21 @@ void Play::playerKilled()
 			score += 15;
 			clydeF->dead = true;
 			clydeF->body = Rect(vec2(3000, 3000), vec2(35, 35));
+		}
+	}
+	else if (abs(pacman->body.x - blinkyF->body.x) < 10 && abs(pacman->body.y - blinkyF->body.y) < 10)
+	{
+		if (!blinkyF->isVulnerable)
+		{
+			pacman->dead = true;
+			pacman->lifes--;
+		}
+		else
+		{
+			blinkyF->beginDead = clock();
+			score += 25;
+			blinkyF->dead = true;
+			blinkyF->body = Rect(vec2(3000, 3000), vec2(35, 35));
 		}
 	}
 }
@@ -613,6 +690,7 @@ void Play::draw()
 	pacman->draw();
 	inkyF->draw();
 	clydeF->draw();
+	blinkyF->draw();
 	fruit->draw();
 	Renderer::Instance()->PushSprite("Atlas", grey_block, Rect(700, 0, vec2(200,700)));
 

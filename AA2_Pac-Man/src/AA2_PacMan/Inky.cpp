@@ -151,7 +151,6 @@ void Inky::die()
 			beginDead = clock();
 		}
 	}
-	std::cout << deadTimer << std::endl;
 }
 
 void Inky::draw()

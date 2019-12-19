@@ -161,6 +161,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blinky.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Clyde.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Splash_Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blinky.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Clyde.h" />
     <ClInclude Include="Constants.h" />
