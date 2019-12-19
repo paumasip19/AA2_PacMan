@@ -19,7 +19,7 @@ Blinky::Blinky(vec2 pos)
 	dotBehind = true;
 	isVulnerable = false;
 	lastDirec = InputKeys::LEFT;
-	newLastDirec = InputKeys::LEFT;
+	newLastDirec = InputKeys::RIGHT;
 	lastPos = vec2(pos.x / 35, pos.y / 35);
 	initPos = vec2(pos.x / 35, pos.y / 35);
 	begin = clock();

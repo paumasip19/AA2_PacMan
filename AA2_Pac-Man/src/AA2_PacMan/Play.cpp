@@ -308,7 +308,6 @@ void Play::readXML()
 	pAttributes = pInky->first_attribute("x");
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	//m[x][y] = 'F';
 	inkyF = new Inky(vec2(x * 35, y * 35)); //Inky Init
 
 	//Clyde
@@ -316,7 +315,6 @@ void Play::readXML()
 	pAttributes = pClyke->first_attribute("x");
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	//m[x][y] = 'F';
 	clydeF = new Clyde(vec2(x * 35, y * 35)); //Clyde Init
 
 	//Blinky
@@ -324,7 +322,6 @@ void Play::readXML()
 	pAttributes = pBlinky->first_attribute("x");
 	x = std::atoi(pAttributes->value()) - 1;
 	y = std::atoi(pAttributes->next_attribute()->value()) - 1;
-	//m[x][y] = 'F';
 	blinkyF = new Blinky(vec2(x * 35, y * 35)); //Blinky Init
 
 	//Fruits
@@ -463,154 +460,336 @@ bool Play::canEnemyMove(int _type)
 {
 	switch (_type)
 	{
-	case EnemyType::INKY:
-		if (inkyF->body.x % 35 != 0 || inkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
-		else
-		{
-			inkyF->lastDirec = inkyF->newLastDirec;
-			if (inkyF->lastPos.x > 0 && inkyF->lastPos.x < 19)
-			{
-				inkyF->lastPos = vec2(inkyF->body.x / 35, inkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
-			}
-
+		case EnemyType::INKY:
+			if (inkyF->body.x % 35 != 0 || inkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
 			else
 			{
-				if (inkyF->lastPos.x == 0)
+				inkyF->lastDirec = inkyF->newLastDirec;
+				if (inkyF->lastPos.x > 0 && inkyF->lastPos.x < 19)
 				{
-					inkyF->body.x = 665;
-					inkyF->lastPos = vec2(18, inkyF->lastPos.y);
-
+					inkyF->lastPos = vec2(inkyF->body.x / 35, inkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
 				}
-				else if (inkyF->lastPos.x == 19)
+
+				else
 				{
-					inkyF->body.x = 0;
-					inkyF->lastPos = vec2(1, inkyF->lastPos.y);
+					if (inkyF->lastPos.x == 0)
+					{
+						inkyF->body.x = 665;
+						inkyF->lastPos = vec2(18, inkyF->lastPos.y);
+
+					}
+					else if (inkyF->lastPos.x == 19)
+					{
+						inkyF->body.x = 0;
+						inkyF->lastPos = vec2(1, inkyF->lastPos.y);
+					}
+				}
+
+				switch (inkyF->lastDirec) // Miramos en la dirección que toca si podemos movernos
+				{
+				case InputKeys::UP:
+					if (m[inkyF->lastPos.x][inkyF->lastPos.y - 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::DOWN:
+					if (m[inkyF->lastPos.x][inkyF->lastPos.y + 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::LEFT:
+					if (m[inkyF->lastPos.x - 1][inkyF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::RIGHT:
+					if (m[inkyF->lastPos.x + 1][inkyF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				default:
+					break;
 				}
 			}
+			break;
 
-			switch (inkyF->lastDirec) // Miramos en la dirección que toca si podemos movernos
-			{
-			case InputKeys::UP:
-				if (m[inkyF->lastPos.x][inkyF->lastPos.y - 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::DOWN:
-				if (m[inkyF->lastPos.x][inkyF->lastPos.y + 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::LEFT:
-				if (m[inkyF->lastPos.x - 1][inkyF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::RIGHT:
-				if (m[inkyF->lastPos.x + 1][inkyF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			default:
-				break;
-			}
-		}
-		break;
-	case EnemyType::CLYDE:
-		if (clydeF->body.x % 35 != 0 || clydeF->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hará colisión
-		else
-		{
-			clydeF->lastDirec = clydeF->newLastDirec;
-			if (clydeF->lastPos.x > 0 && clydeF->lastPos.x < 19)
-			{
-				clydeF->lastPos = vec2(clydeF->body.x / 35, clydeF->body.y / 35);	// Se actualiza la última posición de la grid donde estaba el fantasma
-			}
-
+		case EnemyType::CLYDE:
+			if (clydeF->body.x % 35 != 0 || clydeF->body.y % 35 != 0) return true;  // Si no está en el centro de una casilla de la grid directamente sabemos que no hará colisión
 			else
 			{
-				if (clydeF->lastPos.x == 0)
+				clydeF->lastDirec = clydeF->newLastDirec;
+				if (clydeF->lastPos.x > 0 && clydeF->lastPos.x < 19)
 				{
-					clydeF->body.x = 665;
-					clydeF->lastPos = vec2(18, clydeF->lastPos.y);
-
+					clydeF->lastPos = vec2(clydeF->body.x / 35, clydeF->body.y / 35);	// Se actualiza la última posición de la grid donde estaba el fantasma
 				}
-				else if (clydeF->lastPos.x == 19)
+
+				else
 				{
-					clydeF->body.x = 0;
-					clydeF->lastPos = vec2(1, clydeF->lastPos.y);
+					if (clydeF->lastPos.x == 0)
+					{
+						clydeF->body.x = 665;
+						clydeF->lastPos = vec2(18, clydeF->lastPos.y);
+
+					}
+					else if (clydeF->lastPos.x == 19)
+					{
+						clydeF->body.x = 0;
+						clydeF->lastPos = vec2(1, clydeF->lastPos.y);
+					}
+				}
+
+				switch (clydeF->lastDirec) // Miramos en la dirección que toca si podemos movernos
+				{
+				case InputKeys::UP:
+					if (m[clydeF->lastPos.x][clydeF->lastPos.y - 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::DOWN:
+					if (m[clydeF->lastPos.x][clydeF->lastPos.y + 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::LEFT:
+					if (m[clydeF->lastPos.x - 1][clydeF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::RIGHT:
+					if (m[clydeF->lastPos.x + 1][clydeF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				default:
+					break;
 				}
 			}
+			break;
 
-			switch (clydeF->lastDirec) // Miramos en la dirección que toca si podemos movernos
-			{
-			case InputKeys::UP:
-				if (m[clydeF->lastPos.x][clydeF->lastPos.y - 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::DOWN:
-				if (m[clydeF->lastPos.x][clydeF->lastPos.y + 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::LEFT:
-				if (m[clydeF->lastPos.x - 1][clydeF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::RIGHT:
-				if (m[clydeF->lastPos.x + 1][clydeF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			default:
-				break;
-			}
-		}
-		break;
-	case EnemyType::BLINKY:
-		if (blinkyF->body.x % 35 != 0 || blinkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
-		else
-		{
-			blinkyF->lastDirec = blinkyF->newLastDirec;
-
-			if (blinkyF->lastPos.x > 0 && blinkyF->lastPos.x < 19)
-			{
-				blinkyF->lastPos = vec2(blinkyF->body.x / 35, blinkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
-			}
-
+		case EnemyType::BLINKY:
+			if (blinkyF->body.x % 35 != 0 || blinkyF->body.y % 35 != 0) { return true; }  // Si no está en el centro de una casilla de la grid directamente sabemos que no hanrá colisión
 			else
 			{
-				if (blinkyF->lastPos.x == 0)
-				{
-					blinkyF->body.x = 665;
-					blinkyF->lastPos = vec2(18, blinkyF->lastPos.y);
+				//  blinkyF->lastDirec;    | Dirección en la que se mueve ahora
 
-				}
-				else if (blinkyF->lastPos.x == 19)
+				// Actualizamos la posición
+				if (blinkyF->lastPos.x > 0 && blinkyF->lastPos.x < 19)
 				{
-					blinkyF->body.x = 0;
-					blinkyF->lastPos = vec2(1, blinkyF->lastPos.y);
+					blinkyF->lastPos = vec2(blinkyF->body.x / 35, blinkyF->body.y / 35);	    // Se actualiza la última posición de la grid donde estaba el fantasma
+				}
+				// Teleportación del túnel
+				else
+				{
+					if (blinkyF->lastPos.x == 0)
+					{
+						blinkyF->body.x = 665;
+						blinkyF->lastPos = vec2(18, blinkyF->lastPos.y);
+
+					}
+					else if (blinkyF->lastPos.x == 19)
+					{
+						blinkyF->body.x = 0;
+						blinkyF->lastPos = vec2(1, blinkyF->lastPos.y);
+					}
+				}
+
+				int random = rand() % 3 + 1;
+				bool notWall = false;
+				int posibleDirecs = 0;
+
+				switch (blinkyF->lastDirec)
+				{
+					case InputKeys::UP:
+
+						if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') posibleDirecs++;
+
+						if (posibleDirecs > 1 || m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] == 'W')
+						{
+							while (!notWall)
+							{
+								if (random == 1)
+								{
+									if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::LEFT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else if (random == 2)
+								{
+									if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::RIGHT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::UP;
+									}
+									else random = rand() % 3 + 1;
+								}
+							}
+						}
+						
+						break;
+
+					case InputKeys::DOWN:
+
+						if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') posibleDirecs++;
+
+						if (posibleDirecs > 1 || m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] == 'W')
+						{
+							while (!notWall)
+							{
+								if (random == 1)
+								{
+									if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::LEFT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else if (random == 2)
+								{
+									if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::RIGHT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::DOWN;
+									}
+									else random = rand() % 3 + 1;
+								}
+							}
+						}
+
+						break;
+
+					case InputKeys::LEFT:
+
+						if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') posibleDirecs++;
+
+						if (posibleDirecs > 1 || m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] == 'W')
+						{
+							while (!notWall)
+							{
+								if (random == 1)
+								{
+									if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::LEFT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else if (random == 2)
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::UP;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::DOWN;
+									}
+									else random = rand() % 3 + 1;
+								}
+							}
+						}
+
+						break;
+
+					case InputKeys::RIGHT:
+
+						if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') posibleDirecs++;
+						if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') posibleDirecs++;
+
+						if (posibleDirecs > 1 || m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] == 'W')
+						{
+							while (!notWall)
+							{
+								if (random == 1)
+								{
+									if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::RIGHT;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else if (random == 2)
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::UP;
+									}
+									else random = rand() % 3 + 1;
+								}
+								else
+								{
+									if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W')
+									{
+										notWall = true;
+										blinkyF->lastDirec = InputKeys::DOWN;
+									}
+									else random = rand() % 3 + 1;
+								}
+							}
+						}
+						break;
+
+					default:
+						break;
+				}
+
+				// Miramos en la dirección que toca si podemos movernos
+				switch (blinkyF->lastDirec)
+				{
+				case InputKeys::UP:
+					if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::DOWN:
+					if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::LEFT:
+					if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				case InputKeys::RIGHT:
+					if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') return true;
+					else return false;
+					break;
+				default:
+					break;
 				}
 			}
+			break;
 
-			switch (blinkyF->lastDirec) // Miramos en la dirección que toca si podemos movernos
-			{
-			case InputKeys::UP:
-				if (m[blinkyF->lastPos.x][blinkyF->lastPos.y - 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::DOWN:
-				if (m[blinkyF->lastPos.x][blinkyF->lastPos.y + 1] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::LEFT:
-				if (m[blinkyF->lastPos.x - 1][blinkyF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			case InputKeys::RIGHT:
-				if (m[blinkyF->lastPos.x + 1][blinkyF->lastPos.y] != 'W') return true;
-				else return false;
-				break;
-			default:
-				break;
-			}
-		}
-		break;
-	default:
-		return false;
-		break;
+		default:
+			return false;
+			break;
 	}
 }
 
