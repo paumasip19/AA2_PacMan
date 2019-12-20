@@ -17,6 +17,7 @@ public:
 	int newLastDirec;
 	vec2 lastPos;
 	bool isVulnerable;
+	bool moveHalf;
 
 	clock_t begin;
 	double timer;

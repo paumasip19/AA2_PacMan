@@ -23,6 +23,7 @@ Blinky::Blinky(vec2 pos)
 	lastPos = vec2(pos.x / 35, pos.y / 35);
 	initPos = vec2(pos.x / 35, pos.y / 35);
 	begin = clock();
+	moveHalf = true;
 
 	beginVulnerable = clock();
 	vulnerableTimer = 0;
