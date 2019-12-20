@@ -60,6 +60,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 		case START_GAME:
 			system("CLS");
 			pacman->lastDirec = InputKeys::LEFT;
+			pacman->fullDeath = false;
 			if (inputButtons[(int)InputKeys::SPACE])
 			{
 				sceneState = IS_RUNNING;
@@ -74,14 +75,14 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			break;
 
 		case IS_RUNNING:
-			std::cout << numDots << std::endl;
 			
 			//Get Inputs in square centre and out of tunnel
 			if (pacman->getPlayerPosition().x % 35 == 0 && pacman->getPlayerPosition().y % 35 == 0 &&
 				!(pacman->body.x / 35 == 0 && pacman->body.y / 35 == 11  &&
 				  pacman->body.x / 35 == 1 && pacman->body.y / 35 == 11  &&
 				  pacman->body.x / 35 == 18 && pacman->body.y / 35 == 11 &&
-				  pacman->body.x / 35 == 19 && pacman->body.y / 35 == 11))
+				  pacman->body.x / 35 == 19 && pacman->body.y / 35 == 11) &&
+				!pacman->dead)
 			{
 				if (inputButtons[InputKeys::UP])
 				{
@@ -197,50 +198,54 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			blinkyF->die();
 
 			//Move player
-			if (canMove())
+			if (canMove() && !pacman->dead)
 			{			
 				pacman->move();
 				pacman->animationSprite();
 			}
-			pacman->deathAnimation();
 
 			//Fruits Update
 			fruit->update(pacman->body, score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2]);
 
-			//Score Update
-			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2], pacman->lifes);
-
 			// Chech player dead
-			playerKilled();
+			if(!pacman->dead) playerKilled();
+
+			std::cout << pacman->lifes << std::endl;
 
 			//Player spends 1 life
-			if (pacman->dead)
+			if(pacman->dead)
 			{
 				fruit->canAppear = false;
 				fruit->isVisible = false;
 				// Init Pos Player
-				//m[pacman->lastPos.x][pacman->lastPos.y] = ' ';
-				//m[pacman->firstPos.x][pacman->firstPos.y] = 'P';
-				pacman->body.x = pacman->firstPos.x * 35;
-				pacman->body.y = pacman->firstPos.y * 35;
-
-				// Init Pos Inky
-				inkyF->body.x = inkyF->initPos.x * 35;
-				inkyF->body.y = inkyF->initPos.y * 35;
-
-				// Init Pos Clyke
-				clydeF->body.x = clydeF->initPos.x * 35;
-				clydeF->body.y = clydeF->initPos.y * 35;
-
-				// Init Pos Blinky
-				blinkyF->body.x = blinkyF->initPos.x * 35;
-				blinkyF->body.y = blinkyF->initPos.y * 35;
-
 				
-				pacman->dead = false;
-				sceneState = START_GAME;
+				pacman->deathAnimation();
 
+				if (pacman->fullDeath)
+				{
+					pacman->body.x = pacman->firstPos.x * 35;
+					pacman->body.y = pacman->firstPos.y * 35;
+
+					// Init Pos Inky
+					inkyF->body.x = inkyF->initPos.x * 35;
+					inkyF->body.y = inkyF->initPos.y * 35;
+
+					// Init Pos Clyke
+					clydeF->body.x = clydeF->initPos.x * 35;
+					clydeF->body.y = clydeF->initPos.y * 35;
+
+					// Init Pos Blinky
+					blinkyF->body.x = blinkyF->initPos.x * 35;
+					blinkyF->body.y = blinkyF->initPos.y * 35;
+
+					pacman->dead = false;
+					if (pacman->lifes > 0) sceneState = START_GAME;
+					if (pacman->lifes == 0) sceneState = GAME_OVER;
+				}
 			}
+
+			//Score Update
+			hud.update(score, fruitsTimes[0], fruitsTimes[1], fruitsTimes[2], pacman->lifes);
 
 			//PAUSED SCREEN
 			if (inputButtons[(int)InputKeys::P])
@@ -249,7 +254,7 @@ void Play::update(vec2 mousePos, bool inputButtons[], GameState &gameState)
 			}
 			
 			//GAME OVER
-			if (numDots == 0 || pacman->fullDeath)
+			if (numDots == 0)
 			{
 				sceneState = GAME_OVER;
 			}

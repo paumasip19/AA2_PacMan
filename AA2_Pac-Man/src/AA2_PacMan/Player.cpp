@@ -114,7 +114,7 @@ void Player::animationSprite()
 
 void Player::deathAnimation()
 {
-	if (lifes == 0)
+	if (!fullDeath)
 	{
 		timer = double(clock() - begin) / CLOCKS_PER_SEC;
 
