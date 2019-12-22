@@ -23,7 +23,7 @@
     <ProjectGuid>{D74D69A2-3AE5-43FB-91CF-F71AF4C888C8}</ProjectGuid>
     <RootNamespace>AA2PacMan</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>G03_AA2-2</ProjectName>
+    <ProjectName>G03_AA2-3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -202,6 +202,9 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Splash_Screen.h" />
     <ClInclude Include="Types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

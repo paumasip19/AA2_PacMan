@@ -452,7 +452,7 @@ bool Play::canMove()
 			if (m[pacman->body.x / 35][pacman->body.y / 35] == 'S')				// Se mira si se tiene que sumar un powerUp
 			{
 				numDots--;
-				score++;
+				score += 20;
 				inkyF->isVulnerable = true;
 				inkyF->beginVulnerable = clock();
 				clydeF->isVulnerable = true;

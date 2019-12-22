@@ -53,6 +53,10 @@ void Inputs::inputHandle(bool &isRunning)
 				if (event.key.keysym.sym == SDLK_RIGHT) SetKeyValue(InputKeys::RIGHT, true);
 				if (event.key.keysym.sym == SDLK_p) SetKeyValue(InputKeys::P, true);
 				if (event.key.keysym.sym == SDLK_SPACE) SetKeyValue(InputKeys::SPACE, true);
+				if (event.key.keysym.sym == SDLK_w) SetKeyValue(InputKeys::UP, true);
+				if (event.key.keysym.sym == SDLK_a) SetKeyValue(InputKeys::LEFT, true);
+				if (event.key.keysym.sym == SDLK_s) SetKeyValue(InputKeys::DOWN, true);
+				if (event.key.keysym.sym == SDLK_d) SetKeyValue(InputKeys::RIGHT, true);
 				break;
 			case SDL_KEYUP:
 				if (event.key.keysym.sym == SDLK_ESCAPE) SetKeyValue(InputKeys::ESC, false);
@@ -62,6 +66,10 @@ void Inputs::inputHandle(bool &isRunning)
 				if (event.key.keysym.sym == SDLK_RIGHT) SetKeyValue(InputKeys::RIGHT, false);
 				if (event.key.keysym.sym == SDLK_p) SetKeyValue(InputKeys::P, false);
 				if (event.key.keysym.sym == SDLK_SPACE) SetKeyValue(InputKeys::SPACE, false);
+				if (event.key.keysym.sym == SDLK_w) SetKeyValue(InputKeys::UP, false);
+				if (event.key.keysym.sym == SDLK_a) SetKeyValue(InputKeys::LEFT, false);
+				if (event.key.keysym.sym == SDLK_s) SetKeyValue(InputKeys::DOWN, false);
+				if (event.key.keysym.sym == SDLK_d) SetKeyValue(InputKeys::RIGHT, false);
 				break;
 			case SDL_MOUSEMOTION:
 				mouseCoords.x = event.motion.x;
